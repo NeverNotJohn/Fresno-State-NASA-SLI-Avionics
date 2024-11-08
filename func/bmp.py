@@ -20,13 +20,34 @@ def calibrate_BMP280():
     bmp280.sea_level_pressure = sum
     
 def read_temp():
-    return bmp280.temperature
+    
+    try:
+        temp = bmp280.temperature
+    except Exception as e:
+        print("Error: ", e)
+        temp = -1
+    
+    return temp
 
 def read_pressure():
-    return bmp280.pressure
+    
+    try:
+        p = bmp280.pressure
+    except Exception as e:
+        print("Error: ", e)
+        p = -1
+
+    return p
 
 def read_altitude():
-    return bmp280.altitude
+    
+    try:
+        alt = bmp280.altitude
+    except Exception as e:
+        print("Error: ", e)
+        alt = -1
+    
+    return alt
 
 
 """ Main function for debugging """

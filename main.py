@@ -1,6 +1,30 @@
 from func import *
 import time
 
+def record_data(n, begin):
+    
+    # for Debug Reasons
+    data = {
+            "n": n, 
+            "timestamp": time.time() - begin, 
+            "altitude": 0, 
+            "latitude": 0, 
+            "longitude": 0, 
+            "temperature": 0, 
+            "pressure": 0, 
+            "acceleration": 0, 
+            "gyroscope": 0, 
+            "battery": 0
+            }
+    
+    return data
+
+def dic_to_string(data):
+    string = ""
+    for key, value in data.items():
+        string += f"{key}: {value} "
+    return string
+
 def main():
     print("Hello World")
     
@@ -9,8 +33,10 @@ def main():
     
     while True:
         
-        data = {"n": n, "timestamp": time.time() - begin, "altitude": 0, "latitude": 0, "longitude": 0, "temperature": 0, "humidity": 0, "pressure": 0, "acceleration": 0, "gyroscope": 0, "battery": 0}
-        print(data)
+        data = record_data(n, begin)
+        string = dic_to_string(data)
+        
+        print(string)
         n += 1
         time.sleep(0.1)
  

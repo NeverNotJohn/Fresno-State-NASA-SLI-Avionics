@@ -15,9 +15,15 @@ def calibrate_GPS():
 def get_GPS():
 	# x[0] = lat
 	# x[1] = lng
-	newmsg=pynmea2.parse(newdata.decode("utf-8"))
-	lat=newmsg.latitude
-	lng=newmsg.longitude
+	try:
+		newmsg=pynmea2.parse(newdata.decode("utf-8"))
+		lat=newmsg.latitude
+		lng=newmsg.longitude
+	except Exception as e:
+		print("Error: ", e)
+		lat = -1
+		lng = -1
+ 
 	return [lat,lng]
 
 
