@@ -1,7 +1,19 @@
 from func import *
 import time
+import csv
+
+#--------------------Globals Vars--------------------
+filename = "data.csv"
+writer = csv.writer(open(filename, "w", newline=""))
+
+
+#--------------------Functions-----------------------
+def initialize():
+    global writer
+    writer.writerow(["n", "timestamp", "altitude", "latitude", "longitude", "temperature", "pressure", "acceleration", "gyroscope", "battery"])
 
 def record_data(n, begin):
+    global writer
     
     # for Debug Reasons
     data = {
@@ -17,6 +29,8 @@ def record_data(n, begin):
             "battery": 0
             }
     
+    writer.writerow([n, time.time() - begin, 0, 0, 0, 0, 0, 0, 0, 0])
+    
     return data
 
 def dic_to_string(data):
@@ -25,8 +39,11 @@ def dic_to_string(data):
         string += f"{key}: {value} "
     return string
 
+#------------------------Main------------------------
+
 def main():
     print("Hello World")
+    initialize()
     
     n = 0
     begin = time.time()
