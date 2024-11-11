@@ -11,6 +11,9 @@ bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c,address=0x77)
 
 # Zero out sea level pressure for altitude calculations
 def calibrate_BMP280():
+	
+	# Add try statement
+	
     sum = 0
     n = 10
     for i in range(n):
