@@ -85,7 +85,7 @@ def main():
     
     # Before Launch
     altitude = 0
-    while altitude < 0.5:
+    while altitude < 50:                                            # 50 meters  
         altitude = bmp.bmp280.altitude
         record_data(n, begin)
         n += 1
@@ -97,15 +97,15 @@ def main():
     record_data(n, begin, "Launch Detected")
     
     # During Launch
-    ground_counter = 0		# Counts how many points below 50m
+    ground_counter = 0		                                        # Counts how many points below 50m
     
-    while ground_counter < 50:
+    while ground_counter < 50:                                      # About 25 seconds
         altitude = bmp.bmp280.altitude
         record_data(n, begin)
         n += 1
         time.sleep(0.5)
 		
-        if (altitude < 0.5):
+        if (altitude < 50):                                         # 50 meters
             ground_counter = ground_counter + 1
 			
 	# Landed
