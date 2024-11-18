@@ -30,9 +30,15 @@ def initialize():
     GPS.calibrate_GPS()
     print("Calibrating Done!")
     
-    writer.writerow(["n", "timestamp (s)", "altitude (m)", "latitude", "longitude", "temperature", "pressure", "acceleration", "gyroscope", "battery"])
+    writer.writerow(["n", "timestamp (s)", "altitude (m)", "latitude", "longitude", "temperature (C)", "pressure (hPa)", "acceleration", "gyroscope", "battery", "Flags"])
 
-def record_data(n, begin):
+def dic_to_string(data):
+    string = ""
+    for key, value in data.items():
+        string += f"{key}: {value} "
+    return string
+
+def record_data(n, begin, flag=""):
     global writer
     
     altitude = round(bmp.read_altitude(),3)
@@ -54,36 +60,57 @@ def record_data(n, begin):
             "pressure": pressure, 
             "acceleration": 0, 
             "gyroscope": 0, 
-            "battery": 0
+            "battery": 0,
+            "Flags": flag
             }
     
-    writer.writerow([n, time.time() - begin, altitude, latitude, longitude, temperature, pressure, 0, 0, 0])
+    writer.writerow([n, round(time.time() - begin,3), altitude, latitude, longitude, temperature, pressure, 0, 0, 0, flag])
+    string = dic_to_string(data)
+    print(string)
     
     return data
-
-def dic_to_string(data):
-    string = ""
-    for key, value in data.items():
-        string += f"{key}: {value} "
-    return string
 
 #------------------------Main------------------------
 
 def main():
+	
     print("Calibrating.")
     initialize()
     
+    # Variables
     n = 0
     begin = time.time()
+    launched = False
     
-    while True:
-        
+    # Before Launch
+    altitude = 0
+    while altitude < 0.5:
+        altitude = bmp.bmp280.altitude
         data = record_data(n, begin)
-        string = dic_to_string(data)
-        
-        print(string)
         n += 1
         time.sleep(0.5)
+    
+    # Set Launch Bit to True and record on .csv
+    launched = True
+    print("Launch Detected")
+    record_data(n, begin, "Launch Detected")
+    
+    # During Launch
+    
+    ground_counter = 0		# Counts how many points below 50m
+    
+    while ground_counter < 50:
+	altitude = bmp.bmp280.altitude
+	data = record_data(n, begin)
+	n += 1
+	time.sleep(0.5)
+		
+	if (altitude < 0.5):
+		ground_counter++
+			
+	
+    
+	
  
  
  
