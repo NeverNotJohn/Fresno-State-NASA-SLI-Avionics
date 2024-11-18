@@ -24,17 +24,20 @@ writer = csv.writer(open(filename, "w", newline=""))
 def initialize():
     global writer
     
+    print("Calibrating..")
     bmp.calibrate_BMP280()
+    print("Calibrating...")
     GPS.calibrate_GPS()
+    print("Calibrating Done!")
     
     writer.writerow(["n", "timestamp (s)", "altitude (m)", "latitude", "longitude", "temperature", "pressure", "acceleration", "gyroscope", "battery"])
 
 def record_data(n, begin):
     global writer
     
-    altitude = bmp.read_altitude()
-    temperature = bmp.read_temp()
-    pressure = bmp.read_pressure()
+    altitude = round(bmp.read_altitude(),3)
+    temperature = round(bmp.read_temp(),3)
+    pressure = round(bmp.read_pressure(), 3)
     
     temp = GPS.get_GPS()
     latitude = temp[0]
@@ -43,7 +46,7 @@ def record_data(n, begin):
     # for Debug Reasons
     data = {
             "n": n, 
-            "timestamp": time.time() - begin, 
+            "timestamp": round(time.time() - begin,3), 
             "altitude": altitude, 
             "latitude": latitude, 
             "longitude": longitude, 
@@ -67,7 +70,7 @@ def dic_to_string(data):
 #------------------------Main------------------------
 
 def main():
-    print("Hello World")
+    print("Calibrating.")
     initialize()
     
     n = 0
@@ -80,7 +83,7 @@ def main():
         
         print(string)
         n += 1
-        time.sleep(0.1)
+        time.sleep(0.5)
  
  
  
