@@ -109,16 +109,18 @@ def main():
             ground_counter = ground_counter + 1
 			
 	# Landed
-	landed = True
-	print("Touchdown!")
+    landed = True
+    print("Touchdown!")
     record_data(n, begin, "Touchdown!")
-    
+    n += 1
+
+        
     while True:
-		
-		# Do Transmission here
-		
-		# Keep Recording just in case
-		record_data(n, begin, "Landed")
+        
+        # Do transmission Here
+        
+        # Record Data Just in case
+        record_data(n, begin, "Landed")
         n += 1
         time.sleep(0.5)
    
