@@ -86,7 +86,7 @@ def main():
     altitude = 0
     while altitude < 0.5:
         altitude = bmp.bmp280.altitude
-        data = record_data(n, begin)
+        record_data(n, begin)
         n += 1
         time.sleep(0.5)
     
@@ -100,13 +100,13 @@ def main():
     ground_counter = 0		# Counts how many points below 50m
     
     while ground_counter < 50:
-	altitude = bmp.bmp280.altitude
-	data = record_data(n, begin)
-	n += 1
-	time.sleep(0.5)
+        altitude = bmp.bmp280.altitude
+        record_data(n, begin)
+        n += 1
+        time.sleep(0.5)
 		
-	if (altitude < 0.5):
-		ground_counter++
+        if (altitude < 0.5):
+            ground_counter = ground_counter + 1
 			
 	
     
