@@ -81,6 +81,7 @@ def main():
     n = 0
     begin = time.time()
     launched = False
+    landed = False
     
     # Before Launch
     altitude = 0
@@ -96,7 +97,6 @@ def main():
     record_data(n, begin, "Launch Detected")
     
     # During Launch
-    
     ground_counter = 0		# Counts how many points below 50m
     
     while ground_counter < 50:
@@ -108,11 +108,20 @@ def main():
         if (altitude < 0.5):
             ground_counter = ground_counter + 1
 			
-	
+	# Landed
+	landed = True
+	print("Touchdown!")
+    record_data(n, begin, "Touchdown!")
     
-	
- 
- 
+    while True:
+		
+		# Do Transmission here
+		
+		# Keep Recording just in case
+		record_data(n, begin, "Landed")
+        n += 1
+        time.sleep(0.5)
+   
  
 		 
 if __name__ == "__main__":
