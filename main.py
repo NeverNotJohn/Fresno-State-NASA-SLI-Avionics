@@ -66,7 +66,7 @@ def record_data(n, begin, flag=""):
     
     writer.writerow([n, round(time.time() - begin,3), altitude, latitude, longitude, temperature, pressure, 0, 0, 0, flag])
     string = dic_to_string(data)
-    print(string)
+    print(string, "\n")
     
     return data
 
@@ -82,14 +82,16 @@ def main():
     begin = time.time()
     launched = False
     landed = False
+    flight_min = 50
+    sleep_time = 0.5
     
     # Before Launch
     altitude = 0
-    while altitude < 0.5:
+    while altitude < flight_min:
         altitude = bmp.bmp280.altitude
         record_data(n, begin)
         n += 1
-        time.sleep(0.5)
+        time.sleep(sleep_time)
     
     # Set Launch Bit to True and record on .csv
     launched = True
@@ -103,9 +105,9 @@ def main():
         altitude = bmp.bmp280.altitude
         record_data(n, begin)
         n += 1
-        time.sleep(0.5)
+        time.sleep(sleep_time)
 		
-        if (altitude < 0.5):
+        if (altitude < flight_min):
             ground_counter = ground_counter + 1
 			
 	# Landed
@@ -122,7 +124,7 @@ def main():
         # Record Data Just in case
         record_data(n, begin, "Landed")
         n += 1
-        time.sleep(0.5)
+        time.sleep(sleep_time)
    
  
 		 
