@@ -20,9 +20,10 @@ TX -> 10
 """
 
 #--------------------GPIO Setuppp--------------------
-BUZZER_PIN = 6											# GPIO 6
+BUZZER_PIN = 6										# GPIO 6
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUZZER_PIN, GPIO.OUT)
+
 
 #--------------------Globals Vars--------------------
 now = datetime.datetime.now().strftime("%c")
@@ -32,27 +33,11 @@ filename = f"{os.path.dirname(__file__)}/data/{now}.csv"
 print(filename)
 writer = csv.writer(open(filename, "w", newline=""))
 
-n = 0
-begin = time.time()
-launched = False
-landed = False
-flight_min = 50
-sleep_time = 0.5
 
 
 #--------------------Functions-----------------------
-def initialize():
-    global writer
-    
-    print("Calibrating..")
-    bmp.calibrate_BMP280()
-    print("Calibrating...")
-    GPS.calibrate_GPS()
-    print("Calibrating Done!")
-    
-    writer.writerow(["n", "timestamp (s)", "altitude (m)", "latitude", "longitude", "temperature (C)", "pressure (hPa)", "acceleration", "gyroscope", "battery", "Flags"])
 
-def beep(pin, duration=0.2, times=3):
+def beep(pin=6, duration=0.2, times=3):
 	try:
 		for i in range(times):
 			GPIO.output(pin, GPIO.HIGH)
@@ -63,6 +48,20 @@ def beep(pin, duration=0.2, times=3):
 		print("Error: ", e)
 	
 
+def initialize():
+    global writer
+    global BUZZER_PIN
+    
+    print("Calibrating..")
+    bmp.calibrate_BMP280()
+    print("Calibrating...")
+    GPS.calibrate_GPS()
+    print("Calibrating Done!")
+    
+    beep(BUZZER_PIN)
+    
+    writer.writerow(["n", "timestamp (s)", "altitude (m)", "latitude", "longitude", "temperature (C)", "pressure (hPa)", "acceleration", "gyroscope", "battery", "Flags"])
+
 def dic_to_string(data):
     string = ""
     for key, value in data.items():
@@ -71,6 +70,10 @@ def dic_to_string(data):
 
 def record_data(n, begin, flag=""):
     global writer
+    
+    # Beep if it works
+    if n % 20 == 0:
+		beep(BUZZER_PIN, 0.2, 1)
     
     altitude = round(bmp.read_altitude(),3)
     temperature = round(bmp.read_temp(),3)
@@ -105,13 +108,13 @@ def record_data(n, begin, flag=""):
 
 def main():
 	
-	# Variables
-	global n
-	global begin
-	global launched
-	global landed
-	global flight_min
-	global sleep_time
+    # Variables
+    n = 0
+    begin = time.time()
+    launched = False
+    landed = False
+    flight_min = 50
+    sleep_time = 0.5
 	
     print("Calibrating.")
     initialize()

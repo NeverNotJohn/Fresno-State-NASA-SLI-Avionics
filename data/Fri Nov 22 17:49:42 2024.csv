@@ -1,0 +1,4 @@
+n,timestamp (s),altitude (m),latitude,longitude,temperature (C),pressure (hPa),acceleration,gyroscope,battery,Flags
+0,9.907,-0.018,0.0,0.0,22.832,1001.544,0,0,0,
+1,10.568,0.101,0.0,0.0,22.847,1001.555,0,0,0,
+2,11.228,0.114,-1,-1,22.852,1001.582,0,0,0,
