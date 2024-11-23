@@ -65,14 +65,14 @@ def initialize():
 def dic_to_string(data):
     string = ""
     for key, value in data.items():
-        string += f"{key}: {value} "
+        string += f"{key}: {value}\n"
     return string
 
 def record_data(n, begin, flag=""):
     global writer
     
     # Beep if it works
-    if n % 20 == 0:
+    if n % 5 == 0:
         beep(BUZZER_PIN, 0.2, 1)
     
     altitude = round(bmp.read_altitude(),3)
@@ -107,6 +107,8 @@ def record_data(n, begin, flag=""):
 #------------------------Main------------------------
 
 def main():
+	
+    beep(6,0.05,25)
 	
     # Variables
     n = 0

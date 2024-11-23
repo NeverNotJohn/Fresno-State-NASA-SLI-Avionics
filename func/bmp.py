@@ -4,8 +4,12 @@ import board
 import adafruit_bmp280
 
 # Create sensor object, communicating over the board's default I2C bus
-i2c = board.I2C()  # uses board.SCL and board.SDA
-bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c,address=0x77)
+try:
+	i2c = board.I2C()  # uses board.SCL and board.SDA
+	bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c,address=0x77)
+except Exception as e:
+	print("Error: ", e)
+	
 
 # change this to match the location's pressure (hPa) at sea level
 
