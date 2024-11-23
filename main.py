@@ -2,6 +2,10 @@ from func import bmp
 from func import GPS
 import time
 import csv
+import datetime
+import os
+import sys
+import RPi.GPIO as GPIO
 
 """
 Pins:
@@ -15,9 +19,25 @@ TX -> 10
 
 """
 
+#--------------------GPIO Setuppp--------------------
+BUZZER_PIN = 6											# GPIO 6
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BUZZER_PIN, GPIO.OUT)
+
 #--------------------Globals Vars--------------------
-filename = "data.csv"
+now = datetime.datetime.now().strftime("%c")
+print(now)
+
+filename = f"{os.path.dirname(__file__)}/data/{now}.csv"
+print(filename)
 writer = csv.writer(open(filename, "w", newline=""))
+
+n = 0
+begin = time.time()
+launched = False
+landed = False
+flight_min = 50
+sleep_time = 0.5
 
 
 #--------------------Functions-----------------------
@@ -31,6 +51,17 @@ def initialize():
     print("Calibrating Done!")
     
     writer.writerow(["n", "timestamp (s)", "altitude (m)", "latitude", "longitude", "temperature (C)", "pressure (hPa)", "acceleration", "gyroscope", "battery", "Flags"])
+
+def beep(pin, duration=0.2, times=3):
+	try:
+		for i in range(times):
+			GPIO.output(pin, GPIO.HIGH)
+			time.sleep(duration)
+			GPIO.output(pin, GPIO.LOW)
+			time.sleep(duration)
+	except Exception as e:
+		print("Error: ", e)
+	
 
 def dic_to_string(data):
     string = ""
@@ -74,16 +105,16 @@ def record_data(n, begin, flag=""):
 
 def main():
 	
+	# Variables
+	global n
+	global begin
+	global launched
+	global landed
+	global flight_min
+	global sleep_time
+	
     print("Calibrating.")
     initialize()
-    
-    # Variables
-    n = 0
-    begin = time.time()
-    launched = False
-    landed = False
-    flight_min = 50
-    sleep_time = 0.5
     
     # Before Launch
     altitude = 0
@@ -117,7 +148,7 @@ def main():
     n += 1
 
         
-    while True:
+    while ground_counter < 500:
         
         # Do transmission Here
         
@@ -125,6 +156,9 @@ def main():
         record_data(n, begin, "Landed")
         n += 1
         time.sleep(sleep_time)
+        ground_counter = ground_counter + 1
+    
+    os.exit(0)
    
  
 		 
