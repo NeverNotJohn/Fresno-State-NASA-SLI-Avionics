@@ -73,7 +73,7 @@ def record_data(n, begin, flag=""):
     
     # Beep if it works
     if n % 20 == 0:
-		beep(BUZZER_PIN, 0.2, 1)
+	beep(BUZZER_PIN, 0.2, 1)
     
     altitude = round(bmp.read_altitude(),3)
     temperature = round(bmp.read_temp(),3)
