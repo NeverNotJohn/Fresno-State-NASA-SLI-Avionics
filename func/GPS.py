@@ -6,11 +6,13 @@ import pynmea2
 def calibrate_GPS():
 	
 	global poty, ser, dataout, newdata
-	
-	port="/dev/ttyS0"
-	ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-	dataout = pynmea2.NMEAStreamReader()
-	newdata=ser.readline()
+	try:
+		port="/dev/ttyS0"
+		ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+		dataout = pynmea2.NMEAStreamReader()
+		newdata=ser.readline()
+	except Exception as e:
+		print("Error: ", e)
 
 def get_GPS():
 	# x[0] = lat
