@@ -15,9 +15,9 @@ except Exception as e:
 
 # Zero out sea level pressure for altitude calculations
 def calibrate_BMP280():
-	
+	global bmp280
 	# Add try statement
-	
+    	
     sum = 0
     n = 10
     for i in range(n):
@@ -27,7 +27,7 @@ def calibrate_BMP280():
     bmp280.sea_level_pressure = sum
     
 def read_temp():
-    
+    global bmp280
     try:
         temp = bmp280.temperature
     except Exception as e:
@@ -37,7 +37,7 @@ def read_temp():
     return temp
 
 def read_pressure():
-    
+    global bmp280
     try:
         p = bmp280.pressure
     except Exception as e:
@@ -47,7 +47,7 @@ def read_pressure():
     return p
 
 def read_altitude():
-    
+    global bmp280
     try:
         alt = bmp280.altitude
     except Exception as e:

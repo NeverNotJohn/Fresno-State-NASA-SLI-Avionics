@@ -27,6 +27,7 @@ GPIO.setup(BUZZER_PIN, GPIO.OUT)
 
 #--------------------Globals Vars--------------------
 now = datetime.datetime.now().strftime("%c")
+now = now.replace(" ", "_")
 print(now)
 
 filename = f"{os.path.dirname(__file__)}/data/{now}.csv"
