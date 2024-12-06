@@ -15,8 +15,8 @@ except Exception as e:
 
 # Zero out sea level pressure for altitude calculations
 def calibrate_BMP280():
-   global bmp280
-   # Add try statement
+    global bmp280
+    # Add try statement
     	
     sum = 0
     n = 10
