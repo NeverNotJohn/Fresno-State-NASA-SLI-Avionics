@@ -6,6 +6,9 @@ import os
 import sys
 import RPi.GPIO as GPIO
 import threading
+from func import heap_sort
+import csv
+import serial
 
 """
 Pins:
@@ -27,10 +30,31 @@ GPIO.setup(BUZZER_PIN, GPIO.OUT)
 
 
 #--------------------Globals Vars--------------------
+final_data = []
 begin = 0
-annoy_cyan = True
+annoy_cyan = False
+heap = heap_sort.MaxHeap("altitude")
+
+now = datetime.datetime.now().strftime("%c")
+now = now.replace(" ", "_")
+now = now.replace(":", ".")
+filename = f"{os.path.dirname(__file__)}/data_141/{now}.csv"
+print(filename)
 
 #--------------------Functions-----------------------
+
+def write_csv(data, name):
+	keys = data[0].keys()
+	
+	with open(name, 'w', newline='') as output_file:
+		dict_writer = csv.DictWriter(output_file,keys)
+		dict_writer.writeheader()
+		dict_writer.writerows(data)
+
+def heap_thread(data):
+	global heap
+	heap.insert(data)
+	
 
 def beep(duration=0.2, times=3, pin=6):
 	try:
@@ -46,8 +70,9 @@ def beep(duration=0.2, times=3, pin=6):
 def calibrate():
 	bmp.calibrate_BMP280()
 	print("Calibrating Done!")
-	beep()
-
+	if (annoy_cyan):
+		beep()
+ 
 def record():
 	global begin
 	
@@ -78,7 +103,6 @@ def button_press():
 	while True:
 		if GPIO.input(26) == GPIO.HIGH:
 			project_start()
-		time.sleep(0.1)
 
 def project_start():
 	print("Button Press")
@@ -94,14 +118,53 @@ def project_start():
 
 def record_loop():
 	global begin
+	global final_data
+	global now 
+	
 	begin = time.time()
 	n = 0
+	b = 0
 	while n < 20:
+		
+		if (annoy_cyan and (b % 10 == 0)):
+			beep(times=1, duration=0.05)
+		
 		data = record()
+		final_data.append(data)
 		altitude = data["altitude"]
 		print(dic_to_string(data))
 		if (altitude < 5):	# Detect on ground with some leeway
 			n = n + 1
+		
+		# Execute Heap Thread
+		heap_handler = threading.Thread(target=heap_thread, args=(data,))
+		heap_handler.start()
+		
+		b = b + 1
+		
+		
+	
+	time.sleep(1)
+	
+	if (annoy_cyan):
+		beep(times=2, duration=1)
+	
+	# Stop
+	
+	m = 10
+	#print(f"Heap = {heap}")
+	#print(f"Data = {final_data}")
+	#print(f"Heap Sorted {m} values:\n", heap.heapsort(m))  
+	write_csv(final_data, filename)
+	write_csv(heap.heap, (f"{os.path.dirname(__file__)}/data_141/heap_{now}.csv"))
+	write_csv(heap.heapsort(m), (f"{os.path.dirname(__file__)}/data_141/heapsort_{now}.csv"))
+	
+	
+	
+	sys.exit()
+	
+	
+
 	
 
 #--------------------Interrupts----------------------
@@ -121,7 +184,6 @@ def main():
 	while True:
 		if GPIO.input(26) == GPIO.HIGH:
 			button_press()
-		time.sleep(0.1)
 	
 if __name__ == "__main__":
     main()

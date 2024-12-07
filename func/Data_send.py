@@ -8,7 +8,7 @@ import adafruit_bmp280
 # Initialize I2C for BMP280
 i2c = busio.I2C(board.SCL, board.SDA)
 bmp = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
-bmp.sea_level_pressure = 1013.25  # Adjust based on your location
+bmp.sea_level_pressure = 1013.25  # Default sea level pressure in hPa
 
 # Initialize UART for Reyax RYLR896
 ser = serial.Serial('/dev/serial0', 115200, timeout=1)
@@ -21,7 +21,7 @@ def send_message(data):
         # Send message via the LoRa module
         command = f"AT+SEND=0,{len(message)},{message}\r\n"
         ser.write(command.encode())
-        time.sleep(2)  # Allow time for transmission
+        time.sleep(0.001)  # Allow time for transmission
         
         # Read and print the module's response
         response = ser.readline().decode('utf-8').strip()
@@ -31,23 +31,25 @@ def send_message(data):
 
 if __name__ == "__main__":
     print("Starting data transmission...")
-
+    start_time = time.time()  # Record the start time
     try:
         while True:
+            # Calculate elapsed time in seconds
+            elapsed_time = round(time.time() - start_time, 2)
+
             # Collect data from BMP280
             data = {
-                "time": round(time.time(), 2),
-                "temperature": round(bmp.temperature, 2),
-                "pressure": round(bmp.pressure, 2),
-                "altitude": round(bmp.altitude, 2)
+                "t": elapsed_time,  # Elapsed time in seconds
+                "tp": round(bmp.temperature, 2),
+                "p": round(bmp.pressure, 2),
+                "a": round(bmp.altitude, 2)
             }
 
-            print(f"Sending data: {data}")
+            print(f"Send: {data}")
             send_message(data)
 
-            time.sleep(.001)  # Transmit every second
+            time.sleep(.001)  # Send data every second
     except KeyboardInterrupt:
         print("Transmission stopped.")
     finally:
-        # Ensure the port is closed when the script stops
         ser.close()

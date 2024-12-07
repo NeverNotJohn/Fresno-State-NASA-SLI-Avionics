@@ -82,18 +82,3 @@ class MaxHeap:
 
 def create_data(time, temperature, pressure, altitude):
     return {"time": time, "temperature": temperature, "pressure": pressure, "altitude": altitude}
-
-# Example Usage
-heap = MaxHeap("altitude")
-heap.insert(create_data(0, 10, 12, 3))
-heap.insert(create_data(0, 10, 12, 10))
-heap.insert(create_data(0, 10, 12, 12))
-heap.insert(create_data(0, 10, 12, 1))
-heap.insert(create_data(0, 10, 12, -1))
-heap.insert(create_data(0, 10, 12, 5))
-heap.insert(create_data(0, 10, 12, 8))
-heap.insert(create_data(0, 10, 12, 11))
-heap.insert(create_data(0, 10, 12, 10))
-
-print("Heap:", heap)  # Heap: [100, 22, 20, 13, 5, 12, 10, 3, 5]
-print("Top three indexes:",heap.heapsort(3))
