@@ -1,6 +1,5 @@
 import time
 import board
-
 import adafruit_bmp280
 
 # Create sensor object, communicating over the board's default I2C bus

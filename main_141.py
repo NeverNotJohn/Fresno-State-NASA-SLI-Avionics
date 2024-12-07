@@ -28,7 +28,7 @@ GPIO.setup(BUZZER_PIN, GPIO.OUT)
 
 #--------------------Globals Vars--------------------
 begin = 0
-annoy_cyan = False
+annoy_cyan = True
 
 #--------------------Functions-----------------------
 
