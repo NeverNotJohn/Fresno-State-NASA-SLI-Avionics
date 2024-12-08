@@ -32,7 +32,7 @@ GPIO.setup(BUZZER_PIN, GPIO.OUT)
 #--------------------Globals Vars--------------------
 final_data = []
 begin = 0
-annoy_cyan = False
+annoy_cyan = True
 heap = heap_sort.MaxHeap("altitude")
 
 now = datetime.datetime.now().strftime("%c")
@@ -124,7 +124,7 @@ def record_loop():
 	begin = time.time()
 	n = 0
 	b = 0
-	while n < 20:
+	while n < 40:
 		
 		if (annoy_cyan and (b % 10 == 0)):
 			beep(times=1, duration=0.05)
@@ -161,7 +161,6 @@ def record_loop():
 	
 	
 	
-	sys.exit()
 	
 	
 
