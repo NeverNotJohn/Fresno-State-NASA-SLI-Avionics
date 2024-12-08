@@ -86,7 +86,7 @@ def record():
 		"pressure" : round(pressure, 2),
 		"altitude" : round(altitude, 2)
 	}
-	time.sleep(0.1)
+	time.sleep(0.05)
 	return data
 
 def dic_to_string(data):
@@ -132,7 +132,7 @@ def record_loop():
 		data = record()
 		final_data.append(data)
 		altitude = data["altitude"]
-		print(dic_to_string(data))
+		#print(dic_to_string(data))
 		if (altitude < 5):	# Detect on ground with some leeway
 			n = n + 1
 		
@@ -158,6 +158,8 @@ def record_loop():
 	write_csv(final_data, filename)
 	write_csv(heap.heap, (f"{os.path.dirname(__file__)}/data_141/heap_{now}.csv"))
 	write_csv(heap.heapsort(m), (f"{os.path.dirname(__file__)}/data_141/heapsort_{now}.csv"))
+	
+	sys.exit()
 	
 	
 	
