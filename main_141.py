@@ -153,6 +153,7 @@ def record_loop():
     begin = time.time()  # Mark the start time
     n = 0  # Counter for consecutive low-altitude readings
     b = 0  # General iteration counter
+    sort = True # Key for heapsort
 
     while n < 40:
         if annoy_cyan and (b % 10 == 0):  # Beep every 10 iterations if enabled
@@ -164,7 +165,9 @@ def record_loop():
         altitude = data["altitude"]
         if altitude < 5:  # Check if altitude indicates ground level
             n += 1
-        
+        if altitude < 15 and sort:
+            write_csv(heap.heapsort(10), f"{os.path.dirname(__file__)}/data_141/heapsort_{now}.csv")
+            sort = False
         # Execute heap insertion in a separate thread
         heap_handler = threading.Thread(target=heap_thread, args=(data,))
         heap_handler.start()
@@ -178,7 +181,6 @@ def record_loop():
     # Save recorded data and heap-related outputs to CSV files
     write_csv(final_data, filename)
     write_csv(heap.heap, f"{os.path.dirname(__file__)}/data_141/heap_{now}.csv")
-    write_csv(heap.heapsort(10), f"{os.path.dirname(__file__)}/data_141/heapsort_{now}.csv")
     sys.exit()  # Exit the script
 
 #------------------------Main------------------------
