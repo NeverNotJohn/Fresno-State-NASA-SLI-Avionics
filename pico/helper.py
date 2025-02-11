@@ -27,16 +27,18 @@ def dic_to_string(data):
         string += f"{key}: {value}\n"
     return string
 
-def record_data(n, begin, buzzer_pin, global_data, flag="",):
+def record_data(n, begin, buzzer_pin, global_data, bmp, flag="",):
     global writer
     
     # Beep if it works
     if n % 5 == 0:
         beep(buzzer_pin, 0.2, 1)
+        
+    bmp_values = bmp.read_values()
     
-    altitude = round(bmp.read_altitude(),3)
-    temperature = round(bmp.read_temp(),3)
-    pressure = round(bmp.read_pressure(), 3)
+    altitude = round(bmp_values[0],3)
+    temperature = round(bmp_values[1],3)
+    pressure = round(bmp_values[2], 3)
     
     temp = GPS.get_GPS()
     latitude = temp[0]
@@ -58,7 +60,7 @@ def record_data(n, begin, buzzer_pin, global_data, flag="",):
             }
     
     #writer.writerow([n, round(time.time() - begin,3), altitude, latitude, longitude, temperature, pressure, 0, 0, 0, flag])
-    global_data.append(data)
+    #global_data.append(data)
     string = dic_to_string(data)
     print(string, "\n")
     

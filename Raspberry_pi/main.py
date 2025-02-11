@@ -36,7 +36,6 @@ print(filename)
 writer = csv.writer(open(filename, "w", newline=""))
 
 
-
 #--------------------Functions-----------------------
 
 def beep(pin=6, duration=0.2, times=3):

@@ -1,6 +1,6 @@
 import bmp
 import helper
-import server
+from server import ap_mode
 from machine import Pin
 import _thread
 import time
@@ -64,7 +64,10 @@ Our Pins
 """
 
 """-------------------Globals----------------------"""
-data = []
+data = "data"
+
+# Objects
+bmp_object = bmp.BMP280()
 
 """-------------------GPIO Setup-------------------"""
 led = Pin("LED", Pin.OUT)
@@ -73,6 +76,10 @@ buzzer = Pin(15, Pin.OUT)
 """-------------------Main Code-------------------"""
 
 def main():
+    
+    print("starting!")
+    """ Debug """
+    
     # Define the pin for the LED
     # Define threads
 
@@ -90,6 +97,9 @@ def main():
     """ Calibrating """
     # FIXME calibrate Have WIFI Button
     helper.initialize()
+    bmp_object.calibrate()
+    
+    
     
     """ Before Launch """
     # FIXME Press Button to Start Recording
@@ -100,30 +110,34 @@ def main():
     altitude = 0
     
     while altitude < flight_min:
-        altitude = (helper.record_data(n, begin, buzzer_pin=buzzer, global_data=data))["altitude"]
+        altitude = (helper.record_data(n, begin, buzzer_pin=buzzer, global_data=data, bmp=bmp_object))["altitude"]
         n += 1
         time.sleep(sleep_time)
     
     # Launch Detected
     print("Launch Detected")
     launched = True
-    helper.record_data(n, begin, "Launch Detected", data)
+    helper.record_data(n, begin, "Launch Detected", data, bmp=bmp_object)
+    
+    
     
     """ During Launch """
     ground_counter = 0
     
     while ground_counter < 50:
-        altitude = (helper.record_data(n, begin, buzzer_pin=buzzer, global_data=data))["altitude"]
+        altitude = (helper.record_data(n, begin, buzzer_pin=buzzer, global_data=data, bmp=bmp_object))["altitude"]
         n += 1
         time.sleep(sleep_time)
         
         if (altitude < flight_min):
             ground_counter += 1
             
+            
+            
     """ Landed """
     print("Touchdown!")
     landed = True
-    helper.record_data(n, begin, "Touchdown!", global_data=data)
+    helper.record_data(n, begin, "Touchdown!", global_data=data, bmp=bmp_object)
     n += 1
     
     while ground_counter < 500:
@@ -136,5 +150,6 @@ def main():
         
 if __name__ == "__main__":
     led.value(1)
-    _thread.start_new_thread(server.ap_mode, ('john_pico', 'PASSWORD', 'data'))
+    #_thread.start_new_thread(ap_mode, ('john_pico', 'PASSWORD', data))
     main()
+    
