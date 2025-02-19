@@ -69,11 +69,16 @@ def send_wav_over_serial(wav_file_path, port='COM3', baud_rate=230400, chunk_siz
 
 def main():
     print("Begin!")
-    time.sleep(2)
+    time.sleep(5)
     send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
     print("Tuning to 144.3900")
     time.sleep(3)
     send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
+    time.sleep(1)
+    send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
+    time.sleep(1)
+    send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
+    time.sleep(1)
     print("PTT Down")
     time.sleep(3)
     print("Sending audio...")
