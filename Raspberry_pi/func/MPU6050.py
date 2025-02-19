@@ -14,7 +14,7 @@ ACCEL_SCALE = 16384.0  # 1g = 16384 LSB (±2g range)
 GYRO_SCALE = 131.0     # 1°/s = 131 LSB (±250°/s range)
 
 # Initialize I2C bus (Use 0 for GPIO0 & GPIO1, or 1 for GPIO2 & GPIO3)
-I2C_BUS = 0  # Change to 1 if using standard I2C pins
+I2C_BUS = 1  # Change to 1 if using standard I2C pins
 bus = smbus.SMBus(I2C_BUS)
 
 def initialize_mpu6050():
