@@ -76,7 +76,7 @@ def calibrate():
     print("Calibration Done!")
     beep(BUZZER_PIN)
     
-def record_data(n, begin_time, writer, flag=""):
+def record_data(n, begin_time, flag=""):
     """
     Records data to a CSV file and into array
     """
