@@ -70,6 +70,8 @@ def calibrate():
     bmp.calibrate_BMP280()
     print("Calibrating MPU6050...")
     MPU6050.initialize_mpu6050()
+    print("Calibrating GPS6MV2...")
+    GPS6MV2.calibrate_GPS()
     
     # Anything Else needs to calibrate?
     # FIXME
@@ -96,9 +98,6 @@ def record_data(n, begin_time, writer, flag=""):
     temp = GPS.get_GPS()
     latitude = temp[0]
     longitude = temp[1]
-    
-    latitude = 0 # FIXME
-    longitude = 0 # FIXME
     
     # FIXME
     acc = MPU6050.get_sensor_data()[0]
