@@ -1,5 +1,5 @@
 from func import bmp
-from func import GPS6MV2
+# from func import GPS6MV2
 from func import MPU6050
 from func import hv4pt
 from func import GPS
@@ -51,6 +51,13 @@ def beep(pin=26, duration=0.2, times=3):
     except Exception as e:
         print("Error: ", e)
         
+def dic_to_string(data):
+    string = ""
+    for key, value in data.items():
+        string += f"{key}: {value}\n"
+    return string
+    
+    
 def calibrate():
     """
     Calibrates On-Board Sensors
@@ -126,7 +133,7 @@ def main():
     n=0
     begin_time = time.time()
     while True:
-        print(record_data(n, begin_time, None))
+        print(dic_to_string(record_data(n, begin_time, None)))
         n+=1
         time.sleep(1)
         
