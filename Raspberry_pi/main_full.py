@@ -65,8 +65,10 @@ def main():
     # Initialize Writer
     now = datetime.datetime.now().strftime("%c")
     now = now.replace(" ", "_")
-    now = now.replace(":", ".")
+    now = now.replace(":", "_")
     filename = f"{os.path.dirname(__file__)}/data/{now}.csv"
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     print("Writing to: ", filename)
     writer = csv.writer(open(filename, "w", newline=""))
     writer.writerow(["n", "Datetime (UTC)", "Timestamp (s)", "Altitude (m)", "Temperature (C)", "Longitude", "Latitude", "Acceleration X (g)", "Acceleration Y (g)", "Acceleration Z (g)", "Flag"])
