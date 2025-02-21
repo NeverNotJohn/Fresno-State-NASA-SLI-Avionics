@@ -47,7 +47,7 @@ SLEEP_TIME = 0.5
 # Global Variables that will be used across functions
 
 LAUNCHED = False
-APOGEE = 0
+BMP_APOGEE = 0
 BEGIN_TIME = 0
 
 
@@ -78,15 +78,63 @@ def main():
     altitude = 0
     n = 0
     while altitude < FLIGHT_MIN:
-        data = helper.record_data(n, begin_time)
+        data = helper.record_data(n, begin_time, "Before Launch")
         altitude = data["altitude"]
-        n = n + 1
-        time.sleep(SLEEP_TIME)
         
         # Write to CSV
         writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["temperature"], data["longitude"], data["latitude"], data["acc_x"], data["acc_y"], data["acc_z"], data["flag"]])
         
+        # Indexing stuff
+        n = n + 1
+        time.sleep(SLEEP_TIME)
     
+    """ During Launch """
+
+    print("LIFTOFF!")
+    ground_counter = 0
+    
+    while ground_counter < 50:      # bout 25 seconds of ground time
+        data = helper.record_data(n, begin_time, "During Launch")
+        altitude = data["altitude"]
+        
+        # Find BMP_APOGEE
+        if altitude > BMP_APOGEE:
+            BMP_APOGEE = altitude
+        
+        # Count Ground Time
+        if altitude < FLIGHT_MIN:
+            ground_counter += 1
+            
+        # Write to CSV
+        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["temperature"], data["longitude"], data["latitude"], data["acc_x"], data["acc_y"], data["acc_z"], data["flag"]])
+        
+        # Indexing Stuff
+        n = n + 1
+        time.sleep(SLEEP_TIME)
+        
+    """ After Launch """
+    print("TOUCHDOWN!")
+    ground_counter = 0
+    landing_time = time.strftime("%H:%M:%S")
+    print("Landing Time: ", landing_time)
+    
+    while ground_counter < 500: # FIXME: Get 4 ish minutes?
+        
+        # FIXME: Get Firefly Data
+        
+        # Record Temp
+        data = helper.record_data(n, begin_time, "After Launch")
+        temperature = data["temperature"]
+        
+        # Write to CSV
+        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["temperature"], data["longitude"], data["latitude"], data["acc_x"], data["acc_y"], data["acc_z"], data["flag"]])
+        
+        # FIXME: Transmit Data
+        
+        # Indexing Stuff
+        n = n + 1
+        ground_counter += 1
+        time.sleep(SLEEP_TIME)
         
         
     
