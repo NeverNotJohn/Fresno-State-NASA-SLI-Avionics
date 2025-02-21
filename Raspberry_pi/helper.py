@@ -112,7 +112,8 @@ def record_data(n, begin_time, writer, flag=""):
             "latitude": latitude,
             "acc_x": acc_x,
             "acc_y": acc_y,
-            "acc_z": acc_z
+            "acc_z": acc_z,
+            "flag": flag
             }
     
     # Debug

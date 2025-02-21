@@ -47,14 +47,9 @@ SLEEP_TIME = 0.5
 # Global Variables that will be used across functions
 
 LAUNCHED = False
+APOGEE = 0
 BEGIN_TIME = 0
 n = 0
-
-
-
-
-
-
 
 
 
@@ -66,6 +61,32 @@ def main():
     
     # Start Execution
     helper.beep(helper.BUZZER_PIN, 3, 1)
+    
+    # Initialize Writer
+    now = datetime.datetime.now().strftime("%c")
+    now = now.replace(" ", "_")
+    now = now.replace(":", ".")
+    filename = f"{os.path.dirname(__file__)}/data/{now}.csv"
+    print("Writing to: ", filename)
+    writer = csv.writer(open(filename, "w", newline=""))
+    writer.writerow(["n", "Datetime (UTC)", "Timestamp (s)", "Altitude (m)", "Temperature (C)", "Longitude", "Latitude", "Acceleration X (g)", "Acceleration Y (g)", "Acceleration Z (g)", "Flag"])
+    
+    
+    """ Before Launch """
+    
+    altitude = 0
+    while altitude < FLIGHT_MIN:
+        data = helper.record_data()
+        altitude = data["altitude"]
+        n = n + 1
+        time.sleep(SLEEP_TIME)
+        
+        # Write to CSV
+        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["temperature"], data["longitude"], data["latitude"], data["acc_x"], data["acc_y"], data["acc_z"], data["flag"]])
+        
+    
+        
+        
     
     
     
