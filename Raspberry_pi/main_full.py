@@ -2,6 +2,7 @@ from func import bmp
 from func import MPU6050
 from func import hv4pt
 from func import server
+import helper
 
 import time
 import csv
@@ -60,8 +61,11 @@ n = 0
 
 def main():
     print("Execution Start!")
-    
     server.start_website("Awaiting Command")
+    # Will only continue after stuff
+    
+    # Start Execution
+    helper.beep(helper.BUZZER_PIN, 3, 1)
     
     
     

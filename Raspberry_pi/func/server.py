@@ -28,8 +28,8 @@ def web_page(time, data):
                 </head>
                 <body>
                         <div style="text-align: center;">
-                                <h3>{data}</h3>
                                 <h1> Haha avionics so cool poggerssssss</h1>
+                                <h3>{data}</h3>
                                 <h2>Time: {time}</h2>
                                 <form action="./calibrate?">
                                         <button> Calibrate </button>
@@ -46,6 +46,9 @@ def web_page(time, data):
 
 
 def start_website(data):
+    
+    # Variables
+    calibrated = False
     
     # Start Server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)          # AF_INET: IPv4, SOCK_STREAM: TCP
@@ -78,10 +81,21 @@ def start_website(data):
             helper.calibrate()
             
             data = "!!!Calibrated!!!"
+            calibrated = True
             
         elif request == "/record?":
-            print("Recording!")
-            data = "Recording!"
+            if calibrated:
+                helper.record_data(1, time.time(), "test")
+                t = time.localtime()
+                current_time = "{:02}:{:02}:{:02}".format(t[3], t[4], t[5])
+                response = web_page(current_time, data)
+                
+                # Send Webpage
+                client.send("HTTP/1.1 200 OK\r\nContent-type: text/html\r\n\r\n".encode('utf-8'))
+                client.send(response.encode('utf-8'))
+                client.close()
+                print("Recording!")
+                return True
         else:
             pass
         
