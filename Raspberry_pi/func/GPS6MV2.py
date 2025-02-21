@@ -1,21 +1,47 @@
 import serial
+import time
+import string
 import pynmea2
 
-# Open serial port (adjust if using a different port)
-serial_port = "/dev/serial0"  # UART on Raspberry Pi
-baud_rate = 9600  # GPS6MV2 default
+def calibrate_GPS():
+	
+	global poty, ser, dataout, newdata
+	try:
+		port="/dev/ttyS0"
+		ser=serial.Serial(port, baudrate=9600, timeout=0.5)
+		dataout = pynmea2.NMEAStreamReader()
+		newdata=ser.readline()
+	except Exception as e:
+		print("Error: ", e)
 
-try:
-    ser = serial.Serial(serial_port, baud_rate, timeout=1)
-    while True:
-        line = ser.readline().decode('utf-8', errors='ignore')
-        if line.startswith("$GPGGA") or line.startswith("$GPRMC"):
-            try:
-                msg = pynmea2.parse(line)
-                print(f"Latitude: {msg.latitude}, Longitude: {msg.longitude}")
-            except pynmea2.ParseError:
-                continue
-except KeyboardInterrupt:
-    print("\nStopped by user.")
-finally:
-    ser.close()
+def get_GPS():
+	# x[0] = lat
+	# x[1] = lng
+	
+	global poty, ser, dataout, newdata
+	
+	try:
+		newdata=ser.readline()
+		newmsg=pynmea2.parse(newdata.decode("utf-8"))
+		lat=newmsg.latitude
+		lng=newmsg.longitude
+	except Exception as e:
+		print("Error: ", e)
+		lat = -1
+		lng = -1
+ 
+	return [lat,lng]
+
+
+""" Main function for debugging """
+		
+def main():
+	calibrate_GPS()
+	while True:
+		gps_data = get_GPS()
+		gps = "Latitude=  " + str(gps_data[0])+ "  and Longitude=" + str(gps_data[1])
+		print(gps)
+		time.sleep(1)
+		 
+if __name__ == "__main__":
+    main()
