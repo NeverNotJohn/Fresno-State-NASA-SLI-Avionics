@@ -27,8 +27,8 @@ def web_page(time, data):
                         </style>
                 </head>
                 <body>
-                        <h3>{data}</h3>
                         <div style="text-align: center;">
+                                <h3>{data}</h3>
                                 <h1> Haha avionics so cool poggerssssss</h1>
                                 <h2>Time: {time}</h2>
                                 <form action="./calibrate?">
