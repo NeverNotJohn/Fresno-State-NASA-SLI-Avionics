@@ -19,18 +19,18 @@ def get_GPS():
 	# x[1] = lng
 	
 	global ser, dataout, newdata
-	
-    try:
-        port="/dev/ttyS0"
-        ser=serial.Serial(port, baudrate=9600, timeout=0.5)
-        newdata=ser.readline()
-        newmsg=pynmea2.parse(newdata.decode("utf-8"))
-        lat=newmsg.latitude
-        lng=newmsg.longitude
-    except Exception as e:
-        print("Error: ", e)
-        lat = -1
-        lng = -1
+ 
+	try:
+		port = "/dev/ttyS0"
+		ser = serial.Serial(port, baudrate=9600, timeout=0.5)
+		newdata = ser.readline()
+		newmsg = pynmea2.parse(newdata.decode("utf-8"))
+		lat = newmsg.latitude
+		lng = newmsg.longitude
+	except Exception as e:
+		print("Error: ", e)
+		lat = -1
+		lng = -1
  
 	return [lat,lng]
 
