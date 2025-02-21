@@ -46,14 +46,13 @@ SLEEP_TIME = 0.5
 """--------------------GLOBAL VARS------------------"""
 # Global Variables that will be used across functions
 
-LAUNCHED = False
-BMP_APOGEE = 0
-BEGIN_TIME = 0
 
 
 
 
 def main():
+    
+    
     print("Execution Start!")
     server.start_website("Awaiting Command")
     # Will only continue after stuff
@@ -71,6 +70,11 @@ def main():
     print("Writing to: ", filename)
     writer = csv.writer(open(filename, "w", newline=""))
     writer.writerow(["n", "Datetime (UTC)", "Timestamp (s)", "Altitude (m)", "Temperature (C)", "Longitude", "Latitude", "Acceleration X (g)", "Acceleration Y (g)", "Acceleration Z (g)", "Flag"])
+    
+    """ Variables """
+    LAUNCHED = False
+    BMP_APOGEE = 0
+    BEGIN_TIME = 0
     
     
     """ Before Launch """
