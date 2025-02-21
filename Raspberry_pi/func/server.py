@@ -85,7 +85,6 @@ def start_website(data):
             
         elif request == "/record?":
             if calibrated:
-                helper.record_data(1, time.time(), "test")
                 t = time.localtime()
                 current_time = "{:02}:{:02}:{:02}".format(t[3], t[4], t[5])
                 response = web_page(current_time, data)
