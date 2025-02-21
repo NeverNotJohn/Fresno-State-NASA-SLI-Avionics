@@ -2,6 +2,8 @@ import socket
 import threading
 import time
 
+import helper
+
 def web_page(time, data):
     html = f"""
                 <!DOCTYPE html>
@@ -25,6 +27,7 @@ def web_page(time, data):
                         </style>
                 </head>
                 <body>
+                        <h3>{data}</h3>
                         <div style="text-align: center;">
                                 <h1> Haha avionics so cool poggerssssss</h1>
                                 <h2>Time: {time}</h2>
@@ -34,7 +37,6 @@ def web_page(time, data):
                                 <form action="./record?">
                                         <button> Record </button>
                                 </form>
-                                <p>{data}</p>
                         </div>
                 </body>
                 </html>
@@ -71,7 +73,12 @@ def start_website(data):
         
         if request == "/calibrate?":
             print("Calibrating!")
-            data = "Calibrating!"
+            
+            # Actually Calibrate
+            helper.calibrate()
+            
+            data = "!!!Calibrated!!!"
+            
         elif request == "/record?":
             print("Recording!")
             data = "Recording!"
