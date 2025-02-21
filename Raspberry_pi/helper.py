@@ -107,7 +107,7 @@ def record_data(n, begin_time, writer, flag=""):
             "acc_x": acc_x,
             "acc_y": acc_y,
             "acc_z": acc_z
-            }
+            }a
     
     # Debug
     
