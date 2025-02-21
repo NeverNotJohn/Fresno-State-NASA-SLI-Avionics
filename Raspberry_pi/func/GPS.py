@@ -15,13 +15,14 @@ def calibrate_GPS():
 		print("Error: ", e)
 
 def get_GPS():
+    # FIXME: Displays 3 lines, only get lat and lng
 	# x[0] = lat
 	# x[1] = lng
 	
 	global poty, ser, dataout, newdata
 	
 	try:
-		newdata=ser.readline()
+		ser.read(999999)
 		newmsg=pynmea2.parse(newdata.decode("utf-8"))
 		lat=newmsg.latitude
 		lng=newmsg.longitude
