@@ -49,7 +49,6 @@ SLEEP_TIME = 0.5
 LAUNCHED = False
 APOGEE = 0
 BEGIN_TIME = 0
-n = 0
 
 
 
@@ -77,6 +76,7 @@ def main():
     """ Before Launch """
     begin_time = time.time()
     altitude = 0
+    n = 0
     while altitude < FLIGHT_MIN:
         data = helper.record_data(n, begin_time)
         altitude = data["altitude"]
