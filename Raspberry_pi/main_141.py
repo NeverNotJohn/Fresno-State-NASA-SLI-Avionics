@@ -6,8 +6,8 @@ import os
 import sys
 import RPi.GPIO as GPIO
 import threading
-from func import heap_sort
-from func import Data_send
+from func.trash import heap_sort
+from func.trash import Data_send
 import csv
 import serial
 
