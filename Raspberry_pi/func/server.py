@@ -53,6 +53,9 @@ def start_website(data):
     # Wait for a connection
     while True:
         print("Waiting for connection...")  # debug
+        hostname = socket.gethostname()
+        ip_address = socket.gethostbyname(hostname)
+        print(f"Connect to http://{ip_address}:8000")
         client, addr = server.accept()
         print(f"Connection from {addr}")
         
