@@ -110,7 +110,8 @@ def record_data(n, begin_time, writer, flag=""):
             }
     
     # Debug
-    print(data)
+    
+    return data
     
 def main():
     # Test Main
@@ -122,7 +123,10 @@ def main():
     n=0
     begin_time = time.time()
     while True:
-        record_data(n, begin_time, None)
+        print(record_data(n, begin_time, None))
         n+=1
         time.sleep(1)
+        
+if __name__ == "__main__":
+    main()
     
