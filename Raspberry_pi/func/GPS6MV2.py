@@ -16,7 +16,7 @@ def get_GPS():
 		lng = newmsg.longitude
 		ser.close
 	except Exception as e:
-		print("Error: ", e)
+		print("GPS ERROR")
 		lat = -1
 		lng = -1
  
