@@ -1,5 +1,5 @@
 from func import bmp
-from func import GPS
+from func.trash import GPS
 import time
 import csv
 import datetime
