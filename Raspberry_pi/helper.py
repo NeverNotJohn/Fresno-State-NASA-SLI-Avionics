@@ -86,9 +86,12 @@ def record_data(n, begin_time, writer, flag=""):
     altitude = round(bmp.read_altitude(),3)
     temperature = round(bmp.read_temp(),3)
     
-    temp = GPS.get_GPS()
-    latitude = temp[0]
-    longitude = temp[1]
+    #temp = GPS.get_GPS()
+    #latitude = temp[0]
+    #longitude = temp[1]
+    
+    latitude = 0 # FIXME
+    longitude = 0 # FIXME
     
     # FIXME
     acc = MPU6050.get_sensor_data()[0]
