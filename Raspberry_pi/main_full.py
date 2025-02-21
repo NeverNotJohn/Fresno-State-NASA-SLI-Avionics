@@ -1,6 +1,7 @@
 from func import bmp
 from func import MPU6050
 from func import hv4pt
+from func import server
 
 import time
 import csv
@@ -58,7 +59,11 @@ n = 0
 
 
 def main():
-    print("Hello World")
+    print("Execution Start!")
+    
+    server.start_website("Awaiting Command")
+    
+    
     
 if __name__ == "__main__":
     main()
