@@ -8,7 +8,7 @@ def get_GPS():
 	# x[1] = lng
  
 	try:
-		port = "/dev/ttyS0"
+		port = "/dev/serial0"
 		ser = serial.Serial(port, baudrate=9600, timeout=0.5)
 		newdata = ser.readline()
 		newmsg = pynmea2.parse(newdata.decode("utf-8"))
