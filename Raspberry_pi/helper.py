@@ -70,8 +70,6 @@ def calibrate():
     bmp.calibrate_BMP280()
     print("Calibrating MPU6050...")
     MPU6050.initialize_mpu6050()
-    print("Calibrating GPS6MV2...")
-    GPS6MV2.calibrate_GPS()
     
     # Anything Else needs to calibrate?
     # FIXME
