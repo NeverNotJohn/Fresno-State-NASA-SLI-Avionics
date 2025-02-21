@@ -2,7 +2,6 @@ from func import bmp
 from func import GPS6MV2
 from func import MPU6050
 from func import hv4pt
-from func import GPS
 
 import RPi.GPIO as GPIO
 import time
@@ -93,7 +92,7 @@ def record_data(n, begin_time, writer, flag=""):
     altitude = round(bmp.read_altitude(),3)
     temperature = round(bmp.read_temp(),3)
     
-    temp = GPS.get_GPS()
+    temp = GPS6MV2.get_GPS()
     latitude = temp[0]
     longitude = temp[1]
     
