@@ -75,6 +75,35 @@ def combine_wav_files(input_files, output_file):
     combined.export(output_file, format="wav")
     print(f"Combined file saved as {output_file}")
         
+def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
+    """
+    Final Transmission of NASA Hit point
+    
+    THE REAL DEAL
+    """
+    
+    print('Transmitting Data Points...')
+    time.sleep(1)
+    send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
+    print("Tuning to 146.5200")
+    time.sleep(1)
+    send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
+    time.sleep(1)
+    print("PTT Down")
+    
+    # FIXME: Make Audio File Here
+    example = ["audio/call_sign.wav","audio/temperature.wav", "audio/2.wav", "audio/3.wav", "audio/point.wav", "audio/5.wav", "audio/6.wav", "audio/celcius.wav", "audio/call_sign.wav"]
+    combine_wav_files(example, "audio/combined.wav")
+    send_wav_over_serial("audio/combined.wav", PORT, BAUD_RATE)
+    
+    # Let things Cook
+    time.sleep(1)
+    send_serial_data(COMMAND_PTT_UP, PORT, BAUD_RATE)
+    print("PTT Up")
+    
+    
+    
+    
 """-------------------------MAIN-------------------------"""
 
 def main():
