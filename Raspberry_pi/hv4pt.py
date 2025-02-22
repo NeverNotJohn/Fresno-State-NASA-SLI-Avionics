@@ -107,53 +107,74 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
     THE REAL DEAL
     """
     
-    print('Transmitting Data Points...')
-    time.sleep(1)
-    send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
-    print("Tuning to 146.5200")
-    time.sleep(1)
-    send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
-    time.sleep(1)
-    print("PTT Down")
+    """ Tune to and PTT Down """
+    
+    try:
+        print('Transmitting Data Points...')
+        time.sleep(1)
+        send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
+        print("Tuning to 146.5200")
+        time.sleep(1)
+        send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
+        time.sleep(1)
+        print("PTT Down")
+    except Exception as e:
+        print(f"Error tuning: {e}")
     
     """ Make audio Array """
     audio_array = ["audio/call_sign.wav"]
     
     # Apogee
-    audio_array.append("audio/apogee.wav")
-    data_to_audio(apogee, audio_array)
-    # FIXME: record feet
-    audio_array.append("audio/meters.wav")
+    try:
+        audio_array.append("audio/apogee.wav")
+        data_to_audio(apogee, audio_array)
+        # FIXME: record feet
+        audio_array.append("audio/meters.wav")
+    except Exception as e:
+        print(f"Error processing apogee data: {e}")
     
     # Temperature
-    audio_array.append("audio/temperature.wav")
-    data_to_audio(temp_of_site, audio_array)
-    audio_array.append("audio/celcius.wav")
+    try:
+        audio_array.append("audio/temperature.wav")
+        data_to_audio(temp_of_site, audio_array)
+        audio_array.append("audio/celcius.wav")
+    except Exception as e:
+        print(f"Error processing temperature data: {e}")
     
     # Time of Landing
-    audio_array.append("audio/time_of_landing.wav")
-    # FIXME
-    hours = 1
-    minutes = 2
-    seconds = 3
-    data_to_audio(hours, audio_array)
-    audio_array.append("audio/hours.wav")
-    data_to_audio(minutes, audio_array)
-    audio_array.append("audio/minutes.wav")
-    data_to_audio(seconds, audio_array)
-    audio_array.append("audio/seconds.wav")
+    
+    try:
+        audio_array.append("audio/time_of_landing.wav")
+        # FIXME
+        hours = 1
+        minutes = 2
+        seconds = 3
+        data_to_audio(hours, audio_array)
+        audio_array.append("audio/hours.wav")
+        data_to_audio(minutes, audio_array)
+        audio_array.append("audio/minutes.wav")
+        data_to_audio(seconds, audio_array)
+        audio_array.append("audio/seconds.wav")
+    except Exception as e:
+        print(f"Error processing time of landing data: {e}")
     
     # Max Velocity
-    audio_array.append("audio/max_velocity.wav")
-    data_to_audio(max_velocity, audio_array)
-    # FIXME: record feet per second
-    audio_array.append("audio/meters_per_second.wav")
+    try:
+        audio_array.append("audio/max_velocity.wav")
+        data_to_audio(max_velocity, audio_array)
+        # FIXME: record feet per second
+        audio_array.append("audio/meters_per_second.wav")
+    except Exception as e:
+        print(f"Error processing max velocity data: {e}")
     
     # Add Final Call Sign
     audio_array.append("audio/call_sign.wav")
     
     """ Combine Wave Files """
-    combine_wav_files(audio_array, "audio/combined.wav")
+    try:
+        combine_wav_files(audio_array, "audio/combined.wav")
+    except Exception as e:
+        print(f"Error combining audio files: {e}")
     
     """ Send Audio!!! """
     send_wav_over_serial("audio/combined.wav", PORT, BAUD_RATE)
