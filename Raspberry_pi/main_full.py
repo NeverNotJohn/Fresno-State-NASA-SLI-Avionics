@@ -1,6 +1,6 @@
 from func import bmp
 from func import MPU6050
-from func import hv4pt
+from func import kv4pt
 from func import server
 import helper
 
@@ -42,13 +42,6 @@ PIN     | GPIO26
 
 FLIGHT_MIN = 50
 SLEEP_TIME = 0.5
-
-"""--------------------GLOBAL VARS------------------"""
-# Global Variables that will be used across functions
-
-
-
-
 
 def main():
     
@@ -97,7 +90,7 @@ def main():
     print("LIFTOFF!")
     ground_counter = 0
     
-    while ground_counter < 50:      # bout 25 seconds of ground time
+    while ground_counter < 10:      # bout 10 seconds of ground time
         data = helper.record_data(n, begin_time, "During Launch")
         altitude = data["altitude"]
         
@@ -120,9 +113,10 @@ def main():
     print("TOUCHDOWN!")
     ground_counter = 0
     landing_time = time.strftime("%H:%M:%S")
+    touch_down_time = time.time()
     print("Landing Time: ", landing_time)
     
-    while ground_counter < 500: # FIXME: Get 4 ish minutes?
+    while time.time() > touch_down_time + 3000: # Execute for 3000 seconds 
         
         # FIXME: Get Firefly Data
         
@@ -134,6 +128,7 @@ def main():
         writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["temperature"], data["longitude"], data["latitude"], data["acc_x"], data["acc_y"], data["acc_z"], data["flag"]])
         
         # FIXME: Transmit Data
+        kv4pt.transmit_data(BMP_APOGEE, temperature, 1, 1)
         
         # Indexing Stuff
         n = n + 1

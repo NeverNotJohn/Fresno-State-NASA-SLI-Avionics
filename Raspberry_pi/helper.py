@@ -1,7 +1,7 @@
 from func import bmp
 from func import GPS6MV2
 from func import MPU6050
-from func import hv4pt
+from func import kv4pt
 
 import RPi.GPIO as GPIO
 import time

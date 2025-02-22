@@ -113,7 +113,13 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
         print('Transmitting Data Points...')
         time.sleep(1)
         send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
+        time.sleep(2)
+        send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
+        time.sleep(2)
         print("Tuning to 146.5200")
+        send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
+        time.sleep(1)
+        send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
         time.sleep(1)
         send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
         time.sleep(1)
@@ -182,6 +188,7 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
     # Let things Cook
     time.sleep(1)
     send_serial_data(COMMAND_PTT_UP, PORT, BAUD_RATE)
+    
     print("PTT Up")
     
     
@@ -190,8 +197,7 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
 """-------------------------MAIN-------------------------"""
 
 def main():
-    
-    
+    time.sleep(5)
     transmit_data(apogee=4010.12, temp_of_site=1241.21, time_of_landing=1, max_velocity=618.12)
     
 
