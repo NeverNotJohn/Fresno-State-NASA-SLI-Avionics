@@ -18,9 +18,12 @@ I2C_BUS = 1  # Change to 1 if using standard I2C pins
 bus = smbus.SMBus(I2C_BUS)
 
 def initialize_mpu6050():
-    """ Wakes up the MPU6050 from sleep mode """
-    bus.write_byte_data(MPU6050_ADDR, PWR_MGMT_1, 0)
-    time.sleep(0.1)  # Give the sensor time to wake up
+    try:
+        """ Wakes up the MPU6050 from sleep mode """
+        bus.write_byte_data(MPU6050_ADDR, PWR_MGMT_1, 0)
+        time.sleep(0.1)  # Give the sensor time to wake up
+    except Exception as e:
+        print(f"Error initializing MPU6050: {e}")
 
 def read_word(register):
     """ Reads two bytes from the given register and combines them into a signed 16-bit value """
@@ -36,17 +39,21 @@ def read_word(register):
 
 def get_sensor_data():
     """ Reads acceleration and gyroscope data from MPU6050 and converts them to real-world units """
-    accel = {
-        "x": read_word(ACCEL_XOUT_H) / ACCEL_SCALE,  # Convert to g
-        "y": read_word(ACCEL_XOUT_H + 2) / ACCEL_SCALE,
-        "z": read_word(ACCEL_XOUT_H + 4) / ACCEL_SCALE
-    }
-    gyro = {
-        "x": read_word(GYRO_XOUT_H) / GYRO_SCALE,  # Convert to °/s
-        "y": read_word(GYRO_XOUT_H + 2) / GYRO_SCALE,
-        "z": read_word(GYRO_XOUT_H + 4) / GYRO_SCALE
-    }
-    return accel, gyro
+    try:
+        accel = {
+            "x": read_word(ACCEL_XOUT_H) / ACCEL_SCALE,  # Convert to g
+            "y": read_word(ACCEL_XOUT_H + 2) / ACCEL_SCALE,
+            "z": read_word(ACCEL_XOUT_H + 4) / ACCEL_SCALE
+        }
+        gyro = {
+            "x": read_word(GYRO_XOUT_H) / GYRO_SCALE,  # Convert to °/s
+            "y": read_word(GYRO_XOUT_H + 2) / GYRO_SCALE,
+            "z": read_word(GYRO_XOUT_H + 4) / GYRO_SCALE
+        }
+        return accel, gyro
+    except Exception as e:
+        print(f"Error reading sensor data: {e}")
+        return None, None
 
 def main():
     """ Main loop to read and display MPU6050 data with units """

@@ -65,6 +65,8 @@ def send_wav_over_serial(wav_file_path, port='COM3', baud_rate=230400, chunk_siz
     except Exception as e:
         print(f"Error: {e}")
     
+    
+    
 def combine_wav_files(input_files, output_file):
     combined = AudioSegment.empty()
     

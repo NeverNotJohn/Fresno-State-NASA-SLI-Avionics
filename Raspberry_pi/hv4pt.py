@@ -170,32 +170,8 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
 
 def main():
     
-    """
-    print("Begin!")
-    time.sleep(5)
-    send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
-    print("Tuning to 146.5200")
-    time.sleep(1)
-    send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
-    time.sleep(1)
-    send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
-    time.sleep(1)
-    send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
-    time.sleep(1)
-    print("PTT Down")
-    time.sleep(1.5)
-    print("Sending audio...")
     
-    example = ["audio/call_sign.wav","audio/temperature.wav", "audio/2.wav", "audio/3.wav", "audio/point.wav", "audio/5.wav", "audio/6.wav", "audio/celcius.wav", "audio/call_sign.wav"]
-    combine_wav_files(example, "audio/combined.wav")
-    send_wav_over_serial("audio/combined.wav", PORT, BAUD_RATE)
-    
-    time.sleep(1)
-    send_serial_data(COMMAND_PTT_UP, PORT, BAUD_RATE)
-    print("PTT Up")
-    """
-    
-    transmit_data(apogee=3000.12, temp_of_site=30.21, time_of_landing=1, max_velocity=100.12)
+    transmit_data(apogee=4010.12, temp_of_site=1241.21, time_of_landing=1, max_velocity=618.12)
     
 
 if __name__ == "__main__":
