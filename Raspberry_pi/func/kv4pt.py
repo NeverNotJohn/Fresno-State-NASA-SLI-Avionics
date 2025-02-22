@@ -74,7 +74,11 @@ def combine_wav_files(input_files, output_file):
     
     combined.export(output_file, format="wav")
     print(f"Combined file saved as {output_file}")
-        
+    
+def split_time(time_str):
+    hours, minutes, seconds = map(int, time_str.split(":"))
+    return hours, minutes, seconds
+    
 def data_to_audio(data, audio_array):
     """
     Loops through FLOATING NUM and adds chars to audio array
@@ -151,10 +155,7 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
     
     try:
         audio_array.append("audio/time_of_landing.wav")
-        # FIXME
-        hours = 1
-        minutes = 2
-        seconds = 3
+        hours, minutes, seconds = split_time(time_of_landing)
         data_to_audio(hours, audio_array)
         audio_array.append("audio/hours.wav")
         data_to_audio(minutes, audio_array)

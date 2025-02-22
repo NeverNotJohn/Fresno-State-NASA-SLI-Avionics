@@ -27,15 +27,19 @@ def initialize_mpu6050():
 
 def read_word(register):
     """ Reads two bytes from the given register and combines them into a signed 16-bit value """
-    high = bus.read_byte_data(MPU6050_ADDR, register)
-    low = bus.read_byte_data(MPU6050_ADDR, register + 1)
-    value = (high << 8) | low  # Combine high and low bytes
-    
-    # Convert to signed value
-    if value >= 0x8000:
-        value -= 65536  # Convert to negative
-    
-    return value
+    try:
+        high = bus.read_byte_data(MPU6050_ADDR, register)
+        low = bus.read_byte_data(MPU6050_ADDR, register + 1)
+        value = (high << 8) | low  # Combine high and low bytes
+        
+        # Convert to signed value
+        if value >= 0x8000:
+            value -= 65536  # Convert to negative
+        
+        return value
+    except Exception as e:
+        print(f"Error reading word from register {register}: {e}")
+        return None
 
 def get_sensor_data():
     """ Reads acceleration and gyroscope data from MPU6050 and converts them to real-world units """

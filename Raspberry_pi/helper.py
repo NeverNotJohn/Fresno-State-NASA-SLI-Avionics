@@ -89,18 +89,34 @@ def record_data(n, begin_time, flag=""):
         beep(BUZZER_PIN, 0.2, 1)
         
     # Get Data
-    altitude = round(bmp.read_altitude(),3)
-    temperature = round(bmp.read_temp(),3)
+    try:
+        altitude = round(bmp.read_altitude(), 3)
+    except Exception as e:
+        print("Error reading altitude data: ", e)
+        altitude = None
+    try:
+        temperature = round(bmp.read_temp(), 3)
+    except Exception as e:
+        print("Error reading temperature data: ", e)
+        temperature = None
     
-    temp = GPS6MV2.get_GPS()
-    latitude = temp[0]
-    longitude = temp[1]
+    try:
+        temp = GPS6MV2.get_GPS()
+        latitude = temp[0]
+        longitude = temp[1]
+    except Exception as e:
+        print("Error reading GPS data: ", e)
+        latitude = longitude = None
     
     # FIXME
-    acc = MPU6050.get_sensor_data()[0]
-    acc_x = acc["x"]
-    acc_y = acc["y"]
-    acc_z = acc["z"]
+    try:
+        acc = MPU6050.get_sensor_data()[0]
+        acc_x = acc["x"]
+        acc_y = acc["y"]
+        acc_z = acc["z"]
+    except Exception as e:
+        print("Error reading accelerometer data: ", e)
+        acc_x = acc_y = acc_z = None
     
     data = {
             "n": n,

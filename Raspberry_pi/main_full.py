@@ -116,7 +116,7 @@ def main():
     touch_down_time = time.time()
     print("Landing Time: ", landing_time)
     
-    while time.time() > touch_down_time + 3000: # Execute for 3000 seconds 
+    while int(time.time()) < int(touch_down_time + 300): # Execute for 300 seconds 
         
         # FIXME: Get Firefly Data
         
@@ -128,7 +128,7 @@ def main():
         writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["temperature"], data["longitude"], data["latitude"], data["acc_x"], data["acc_y"], data["acc_z"], data["flag"]])
         
         # FIXME: Transmit Data
-        kv4pt.transmit_data(BMP_APOGEE, temperature, 1, 1)
+        kv4pt.transmit_data(BMP_APOGEE, temperature, landing_time, 1)
         
         # Indexing Stuff
         n = n + 1
