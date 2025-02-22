@@ -81,7 +81,7 @@ def main():
     print("Begin!")
     time.sleep(5)
     send_serial_data(COMMAND_TUNE_TO, PORT, BAUD_RATE)
-    print("Tuning to 146.5200")
+    print("Tuning to 144.3900")
     time.sleep(1)
     send_serial_data(COMMAND_PTT_DOWN, PORT, BAUD_RATE)
     time.sleep(1)
