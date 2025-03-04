@@ -11,7 +11,7 @@ from pydub import AudioSegment
 
 """-------------------------CONSTANTS-------------------------"""
 
-PORT = 'COM3'
+PORT = '/dev/ttyUSB0'
 BAUD_RATE = 230400      # 230400 bits per second
 DATA_BITS = 8
 PARITY = 'N'
@@ -198,7 +198,8 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
 
 def main():
     time.sleep(5)
-    transmit_data(apogee=4010.12, temp_of_site=1241.21, time_of_landing=1, max_velocity=618.12)
+    while True:
+		transmit_data(apogee=4010.12, temp_of_site=1241.21, time_of_landing=1, max_velocity=618.12)
     
 
 if __name__ == "__main__":

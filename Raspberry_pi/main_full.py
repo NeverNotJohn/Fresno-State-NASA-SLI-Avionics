@@ -40,7 +40,7 @@ PIN     | GPIO26
 """--------------------CONSTANTS--------------------"""
 # Constants that won't be touched
 
-FLIGHT_MIN = 50
+FLIGHT_MIN = 25
 SLEEP_TIME = 0.5
 
 def main():
@@ -89,8 +89,9 @@ def main():
 
     print("LIFTOFF!")
     ground_counter = 0
+    lift_off_time = time.time()
     
-    while ground_counter < 10:      # bout 10 seconds of ground time
+    while (ground_counter < 10) and (int(time.time()) < int(lift_off_time + 900)):      # bout 10 seconds of ground time
         data = helper.record_data(n, begin_time, "During Launch")
         altitude = data["altitude"]
         
@@ -116,7 +117,7 @@ def main():
     touch_down_time = time.time()
     print("Landing Time: ", landing_time)
     
-    while int(time.time()) < int(touch_down_time + 300): # Execute for 300 seconds 
+    while int(time.time()) < int(touch_down_time + 600): # Execute for 300 seconds 
         
         # FIXME: Get Firefly Data
         

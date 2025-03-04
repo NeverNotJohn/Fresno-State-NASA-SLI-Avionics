@@ -200,7 +200,8 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
 
 def main():
     time.sleep(1)
-    transmit_data(apogee=4010.12, temp_of_site=1241.21, time_of_landing="25:11:21", max_velocity=618.12)
+    while True:
+        transmit_data(apogee=4010.12, temp_of_site=1241.21, time_of_landing="11:20:30", max_velocity=618.12)
     
 
 if __name__ == "__main__":

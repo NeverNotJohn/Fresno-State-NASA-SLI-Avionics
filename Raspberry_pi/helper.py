@@ -133,6 +133,7 @@ def record_data(n, begin_time, flag=""):
             }
     
     # Debug
+    print(dic_to_string(data))
     
     return data
     

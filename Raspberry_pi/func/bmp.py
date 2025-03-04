@@ -7,6 +7,7 @@ try:
     i2c = board.I2C()  # Initialize I2C communication using the board's default pins (SCL and SDA)
     bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x77)  # Connect to the BMP280 sensor at address 0x77
 except Exception as e:
+    print("rip")
     print("Error: ", e)  # Handle initialization errors, e.g., if the sensor is not connected
 
 #--------------------Functions--------------------
@@ -19,7 +20,7 @@ def calibrate_BMP280():
     global bmp280
     try:
         sum = 0
-        n = 10  # Number of readings for calibration
+        n = 50  # Number of readings for calibration
         for i in range(n):
             sum += bmp280.pressure  # Accumulate pressure readings
             time.sleep(0.33)  # Wait briefly between readings to stabilize
