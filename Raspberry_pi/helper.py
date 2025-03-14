@@ -1,6 +1,6 @@
 from func import bmp
 from func import GPS6MV2
-from func import MPU6050
+from trash import MPU6050
 from func import kv4pt
 
 import RPi.GPIO as GPIO

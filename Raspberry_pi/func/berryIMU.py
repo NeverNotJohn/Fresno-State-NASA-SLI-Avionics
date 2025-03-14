@@ -20,7 +20,7 @@
 import sys
 import time
 import math
-import IMU
+import func.IMU as IMU
 import datetime
 import os
 
@@ -335,10 +335,6 @@ def read_imu_data():
         if tiltCompensatedHeading < 0:
             tiltCompensatedHeading += 360
 
-        outputString += "#  ACCX Angle %5.2f ACCY Angle %5.2f  #  " % (AccXangle, AccYangle)
-        outputString += "\t# GRYX Angle %5.2f  GYRY Angle %5.2f  GYRZ Angle %5.2f # " % (gyroXangle, gyroYangle, gyroZangle)
-        outputString += "\t#  CFangleX Angle %5.2f   CFangleY Angle %5.2f  #" % (CFangleX, CFangleY)
-        outputString += "\t# HEADING %5.2f  tiltCompensatedHeading %5.2f #" % (heading, tiltCompensatedHeading)
         outputString += "# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX, kalmanY)
 
         print(outputString)
