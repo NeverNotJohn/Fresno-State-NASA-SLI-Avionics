@@ -8,6 +8,8 @@ sys.path.append(os.path.abspath("func"))
 
 import time
 import math
-import berryIMU
+from func import berryIMU
 
 print("Hello World")
+
+berryIMU.read_imu_data()
