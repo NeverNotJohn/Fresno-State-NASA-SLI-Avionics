@@ -15,14 +15,17 @@
 #
 #    http://ozzmaker.com/
 
-
-
 import sys
+import os
+
+# Get the parent directory and add it to sys.path
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 import time
 import math
 import func.IMU as IMU
 import datetime
-import os
+
 
 
 RAD_TO_DEG = 57.29578

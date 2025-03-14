@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Get the parent directory and add it to sys.path
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 import smbus
 bus = smbus.SMBus(1)
 from LSM9DS0 import *
