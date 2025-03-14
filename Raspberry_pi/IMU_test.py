@@ -12,9 +12,6 @@ from func import berryIMU
 import threading
 
 def main():
-    
-    global global_kalman_x, global_kalman_y
-    global berry_stop, berry_lock
 
     print("Hello World")
 
@@ -24,12 +21,12 @@ def main():
 
     for _ in range(5):
 
-        with berry_lock:
-            print(f"x: {global_kalman_x}, y: {global_kalman_y}")
+        with berryIMU.berry_lock:
+            print(f"x: {berryIMU.global_kalman_x}, y: {berryIMU.global_kalman_y}")
             time.sleep(3)
             
-    with berry_lock:
-        berry_stop = True
+    with berryIMU.berry_lock:
+        berryIMU.berry_stop = True
         print("Stopping BerryIMU thread")
 
 if __name__ == "__main__":
