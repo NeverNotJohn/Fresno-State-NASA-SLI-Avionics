@@ -23,7 +23,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 import time
 import math
-import func.IMU as IMU
+import IMU
 import datetime
 import threading
 
