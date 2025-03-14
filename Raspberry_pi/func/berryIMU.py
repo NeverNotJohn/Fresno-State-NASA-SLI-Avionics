@@ -351,7 +351,7 @@ def read_imu_data():
         # Convert Accelerometer values to degrees
         AccXangle = (math.atan2(ACCy, ACCz) * RAD_TO_DEG)
         AccYangle = (math.atan2(ACCz, ACCx) + M_PI) * RAD_TO_DEG
-        AccZangle = (math.atan2(ACCy, ACCx) * RAD_TO_DEG)
+        AccZangle = (math.atan2(ACCx, ACCy) * RAD_TO_DEG)
 
         if AccYangle > 90:
             AccYangle -= 270.0
