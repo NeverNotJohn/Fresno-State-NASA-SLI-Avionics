@@ -115,6 +115,9 @@ def record_data(n, begin_time, flag=""):
     if n % 5 == 0:
         beep(BUZZER_PIN, 0.2, 1)
         
+    # Get Current Time
+    curr_time = round(time.time() - begin_time, 3)
+        
     # Get Previous Data
     prev_altitude = DATA_ARRAY[-1]["altitude"] if DATA_ARRAY else None
     prev_time = DATA_ARRAY[-1]["timestamp"] if DATA_ARRAY else None        
@@ -122,8 +125,9 @@ def record_data(n, begin_time, flag=""):
     # Get Data
     # Get altitude/velocity
     try:
-        curr_time = round(time.time() - begin_time, 3)
         altitude = round(bmp.read_altitude(), 3)
+        # Convert altitude to feet
+        altitude = altitude * 3.28084 if altitude is not None else None
         velocity = calculate_velocity(prev_altitude, altitude, prev_time, curr_time)
     except Exception as e:
         print("Error reading altitude data: ", e)
@@ -150,13 +154,11 @@ def record_data(n, begin_time, flag=""):
         print("Error reading GPS data: ", e)
         latitude = longitude = None
         
-    # Convert from m to ft
-    altitude = altitude * 3.28084 if altitude is not None else None
     
     data = {
             "n": n,
             "datetime": time.strftime("%Y-%m-%d %H:%M:%S"),
-            "timestamp": round(time.time() - begin_time,3),
+            "timestamp": curr_time,
             "altitude": altitude,
             "velocity": velocity,
             "temperature": temperature,
