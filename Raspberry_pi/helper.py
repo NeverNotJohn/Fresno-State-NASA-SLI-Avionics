@@ -31,6 +31,7 @@ GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 APOGEE = 0
 DATA_ARRAY = []
+MAX_VELOCITY = 0
 
 
 """--------------------FUNCTIONS-----------------"""
@@ -76,30 +77,71 @@ def calibrate():
     print("Calibration Done!")
     beep(BUZZER_PIN)
     
+def calculate_velocity(prev_altitude, curr_altitude, prev_time, curr_time):
+    """
+    Calculates velocity based on altitude change over time.
+    
+    Args:
+        prev_altitude (float): Previous altitude reading.
+        curr_altitude (float): Current altitude reading.
+        prev_time (float): Previous timestamp.
+        curr_time (float): Current timestamp.
+
+    Returns:
+        float: Velocity in m/s, or None if calculation fails.
+    """
+    try:
+        if prev_time is None or prev_altitude is None:
+            return None  # First reading, velocity cannot be determined
+        
+        if curr_time - prev_time == 0:
+            return None  # Prevent division by zero
+
+        velocity = (curr_altitude - prev_altitude) / (curr_time - prev_time)
+        return round(velocity, 3)
+    except Exception as e:
+        print("Error calculating velocity:", e)
+        return None    
+
 def record_data(n, begin_time, flag=""):
     """
     Records data to a CSV file and into array
     """
     global BUZZER_PIN
     global APOGEE
-    global DATETIME, EXECUTION_TIME, ALTITUDE, TEMPERATURE, LONGITUDE, LATITUDE, ACC_X, ACC_Y, ACC_Z
+    global DATETIME, EXECUTION_TIME, ALTITUDE, TEMPERATURE, LONGITUDE, LATITUDE, ACC_X, ACC_Y, ACC_Z, MAX_VELOCITY
     
     # Beep if it works
     if n % 5 == 0:
         beep(BUZZER_PIN, 0.2, 1)
         
+    # Get Previous Data
+    prev_altitude = DATA_ARRAY[-1]["altitude"] if DATA_ARRAY else None
+    prev_time = DATA_ARRAY[-1]["timestamp"] if DATA_ARRAY else None        
+
     # Get Data
+    # Get altitude/velocity
     try:
+        curr_time = round(time.time() - begin_time, 3)
         altitude = round(bmp.read_altitude(), 3)
+        velocity = calculate_velocity(prev_altitude, altitude, prev_time, curr_time)
     except Exception as e:
         print("Error reading altitude data: ", e)
         altitude = None
+        velocity = None
+        
+    # Update max velocity
+    if velocity is not None:
+        MAX_VELOCITY = max(MAX_VELOCITY, velocity)
+    
+    # Get Temperature
     try:
         temperature = round(bmp.read_temp(), 3)
     except Exception as e:
         print("Error reading temperature data: ", e)
         temperature = None
     
+    # Get GPS Data
     try:
         temp = GPS6MV2.get_GPS()
         latitude = temp[0]
@@ -107,16 +149,6 @@ def record_data(n, begin_time, flag=""):
     except Exception as e:
         print("Error reading GPS data: ", e)
         latitude = longitude = None
-    
-    # FIXME
-    try:
-        acc = MPU6050.get_sensor_data()[0]
-        acc_x = acc["x"]
-        acc_y = acc["y"]
-        acc_z = acc["z"]
-    except Exception as e:
-        print("Error reading accelerometer data: ", e)
-        acc_x = acc_y = acc_z = None
     
     data = {
             "n": n,
@@ -126,14 +158,15 @@ def record_data(n, begin_time, flag=""):
             "temperature": temperature,
             "longitude": longitude,
             "latitude": latitude,
-            "acc_x": acc_x,
-            "acc_y": acc_y,
-            "acc_z": acc_z,
+            "acc_x": -1,
+            "acc_y": -1,
+            "acc_z": -1,
             "flag": flag
             }
     
     # Debug
     print(dic_to_string(data))
+    print("Velocity: ", velocity)
     
     return data
     
