@@ -23,7 +23,8 @@ def main():
 
         with berryIMU.berry_lock:
             print(f"x: {berryIMU.global_kalman_x}, y: {berryIMU.global_kalman_y}")
-            time.sleep(3)
+
+        time.sleep(3)
             
     with berryIMU.berry_lock:
         berryIMU.berry_stop = True
