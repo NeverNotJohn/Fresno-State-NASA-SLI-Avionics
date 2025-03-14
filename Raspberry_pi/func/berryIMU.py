@@ -25,9 +25,17 @@ import time
 import math
 import func.IMU as IMU
 import datetime
+import threading
+
+"""----------------------------GLOBAL VARIABLES----------------------------"""
+
+global_kalman_x = 0.0
+global_kalman_y = 0.0
+berry_stop = False
+berry_lock = threading.Lock()
 
 
-
+"""----------------------------CONSTANTS----------------------------"""
 RAD_TO_DEG = 57.29578
 M_PI = 3.14159265358979323846
 G_GAIN = 0.070          # [deg/s/LSB]  If you change the dps for gyro, you need to update this value accordingly
@@ -196,6 +204,8 @@ def read_imu_data():
     global acc_medianTable1X, acc_medianTable1Y, acc_medianTable1Z, acc_medianTable2X, acc_medianTable2Y, acc_medianTable2Z
     global mag_medianTable1X, mag_medianTable1Y, mag_medianTable1Z, mag_medianTable2X, mag_medianTable2Y, mag_medianTable2Z
     global a
+    global global_kalman_x, global_kalman_y
+    global berry_lock, berry_stop
 
     IMU.detectIMU()     # Detect if BerryIMU is connected.
     if(IMU.BerryIMUversion == 99):
@@ -340,8 +350,20 @@ def read_imu_data():
 
         outputString += "# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX, kalmanY)
 
-        print(outputString)
+        # print(outputString)
+        
+        # Set global var to this
 
+        with berry_lock:  # Ensures exclusive access
+            
+            if berry_stop:
+                break
+            
+            global_kalman_x = kalmanX
+            global_kalman_y = kalmanY
+            
+            
+        
         time.sleep(0.03)
 
 # Call the function to start reading IMU data
