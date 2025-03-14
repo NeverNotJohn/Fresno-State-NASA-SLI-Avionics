@@ -150,9 +150,8 @@ def record_data(n, begin_time, flag=""):
         print("Error reading GPS data: ", e)
         latitude = longitude = None
         
-    # Convert from m to ft and m/s to ft/s
+    # Convert from m to ft
     altitude = altitude * 3.28084 if altitude is not None else None
-    velocity = velocity * 3.28084 if velocity is not None else None
     
     data = {
             "n": n,
