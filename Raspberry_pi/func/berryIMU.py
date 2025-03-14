@@ -350,7 +350,7 @@ def read_imu_data():
 
         outputString += "# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX, kalmanY)
 
-        print(outputString)
+        #print(outputString)
         
         # Set global var to this
 

@@ -30,7 +30,7 @@ def main():
         berryIMU.berry_stop = True
         print("Stopping BerryIMU thread")
         
-    time.sleep(10)
+    time.sleep(5)
 
 if __name__ == "__main__":
     main()
