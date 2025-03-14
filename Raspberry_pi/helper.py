@@ -164,6 +164,9 @@ def record_data(n, begin_time, flag=""):
             "flag": flag
             }
     
+    # Add Data to data array
+    DATA_ARRAY.append(data)
+    
     # Debug
     print(dic_to_string(data))
     print("Velocity: ", velocity)
