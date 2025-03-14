@@ -246,7 +246,7 @@ def read_imu_data():
     global acc_medianTable1X, acc_medianTable1Y, acc_medianTable1Z, acc_medianTable2X, acc_medianTable2Y, acc_medianTable2Z
     global mag_medianTable1X, mag_medianTable1Y, mag_medianTable1Z, mag_medianTable2X, mag_medianTable2Y, mag_medianTable2Z
     global a
-    global global_kalman_x, global_kalman_y
+    global global_kalman_x, global_kalman_y, global_kalman_z
     global berry_lock, berry_stop
 
     IMU.detectIMU()     # Detect if BerryIMU is connected.
@@ -371,7 +371,7 @@ def read_imu_data():
 
         outputString += "# kalmanX %5.2f   kalmanY %5.2f   kalmanZ %5.2f #" % (kalmanX, kalmanY, kalmanZ)
 
-        #print(outputString)
+        print(outputString)
         
         # Set global var to this
 
