@@ -31,6 +31,7 @@ import threading
 
 global_kalman_x = 0.0
 global_kalman_y = 0.0
+global_kalman_z = 0.0
 berry_stop = False
 berry_lock = threading.Lock()
 
@@ -79,6 +80,7 @@ Q_gyro = 0.0015
 R_angle = 0.005
 y_bias = 0.0
 x_bias = 0.0
+z_bias = 0.0
 XP_00 = 0.0
 XP_01 = 0.0
 XP_10 = 0.0
@@ -87,10 +89,47 @@ YP_00 = 0.0
 YP_01 = 0.0
 YP_10 = 0.0
 YP_11 = 0.0
+ZP_00 = 0.0
+ZP_01 = 0.0
+ZP_10 = 0.0
+ZP_11 = 0.0
 KFangleX = 0.0
 KFangleY = 0.0
 
-
+def kalmanFilterZ ( accAngle, gyroRate, DT):
+    z=0.0
+    S=0.0
+    
+    global KFangleZ
+    global Q_angle
+    global Q_gyro
+    global z_bias
+    global ZP_00
+    global ZP_01
+    global ZP_10
+    global ZP_11
+    
+    KFangleZ = KFangleZ + DT * (gyroRate - z_bias)
+    
+    ZP_00 = ZP_00 + ( - DT * (ZP_10 + ZP_01) + Q_angle * DT )
+    ZP_01 = ZP_01 + ( - DT * ZP_11 )
+    ZP_10 = ZP_10 + ( - DT * ZP_11 )
+    ZP_11 = ZP_11 + ( + Q_gyro * DT )
+    
+    z = accAngle - KFangleZ
+    S = ZP_00 + R_angle
+    K_0 = ZP_00 / S
+    K_1 = ZP_10 / S
+    
+    KFangleZ = KFangleZ + ( K_0 * z )
+    z_bias = z_bias + ( K_1 * z )
+    
+    ZP_00 = ZP_00 - ( K_0 * ZP_00 )
+    ZP_01 = ZP_01 - ( K_0 * ZP_01 )
+    ZP_10 = ZP_10 - ( K_1 * ZP_00 )
+    ZP_11 = ZP_11 - ( K_1 * ZP_01 )
+    
+    return KFangleZ
 
 def kalmanFilterY ( accAngle, gyroRate, DT):
     y=0.0
@@ -169,10 +208,13 @@ gyroYangle = 0.0
 gyroZangle = 0.0
 CFangleX = 0.0
 CFangleY = 0.0
+CFangleZ = 0.0
 CFangleXFiltered = 0.0
 CFangleYFiltered = 0.0
+CFangleZFiltered = 0.0
 kalmanX = 0.0
 kalmanY = 0.0
+kalmanZ = 0.0
 oldXMagRawValue = 0
 oldYMagRawValue = 0
 oldZMagRawValue = 0
@@ -184,7 +226,7 @@ a = datetime.datetime.now()
 
 
 
-#Setup the tables for the mdeian filter. Fill them all with '1' so we dont get devide by zero error
+#Setup the tables for the median filter. Fill them all with '1' so we dont get devide by zero error
 acc_medianTable1X = [1] * ACC_MEDIANTABLESIZE
 acc_medianTable1Y = [1] * ACC_MEDIANTABLESIZE
 acc_medianTable1Z = [1] * ACC_MEDIANTABLESIZE
@@ -199,7 +241,7 @@ mag_medianTable2Y = [1] * MAG_MEDIANTABLESIZE
 mag_medianTable2Z = [1] * MAG_MEDIANTABLESIZE
 
 def read_imu_data():
-    global gyroXangle, gyroYangle, gyroZangle, CFangleX, CFangleY, kalmanX, kalmanY
+    global gyroXangle, gyroYangle, gyroZangle, CFangleX, CFangleY, CFangleZ, kalmanX, kalmanY, kalmanZ
     global oldXMagRawValue, oldYMagRawValue, oldZMagRawValue, oldXAccRawValue, oldYAccRawValue, oldZAccRawValue
     global acc_medianTable1X, acc_medianTable1Y, acc_medianTable1Z, acc_medianTable2X, acc_medianTable2Y, acc_medianTable2Z
     global mag_medianTable1X, mag_medianTable1Y, mag_medianTable1Z, mag_medianTable2X, mag_medianTable2Y, mag_medianTable2Z
@@ -308,47 +350,26 @@ def read_imu_data():
         # Convert Accelerometer values to degrees
         AccXangle = (math.atan2(ACCy, ACCz) * RAD_TO_DEG)
         AccYangle = (math.atan2(ACCz, ACCx) + M_PI) * RAD_TO_DEG
+        AccZangle = (math.atan2(ACCx, ACCy) + M_PI) * RAD_TO_DEG
 
         if AccYangle > 90:
             AccYangle -= 270.0
         else:
             AccYangle += 90.0
 
+        
+
         # Complementary filter used to combine the accelerometer and gyro values.
         CFangleX = AA * (CFangleX + rate_gyr_x * LP) + (1 - AA) * AccXangle
         CFangleY = AA * (CFangleY + rate_gyr_y * LP) + (1 - AA) * AccYangle
+        CFangleZ = AA * (CFangleZ + rate_gyr_z * LP) + (1 - AA) * AccZangle
 
         # Kalman filter used to combine the accelerometer and gyro values.
         kalmanY = kalmanFilterY(AccYangle, rate_gyr_y, LP)
         kalmanX = kalmanFilterX(AccXangle, rate_gyr_x, LP)
+        kalmanZ = kalmanFilterZ(AccZangle, rate_gyr_z, LP)
 
-        # Calculate heading
-        heading = 180 * math.atan2(MAGy, MAGx) / M_PI
-        if heading < 0:
-            heading += 360
-
-        # Tilt compensated heading
-        accXnorm = ACCx / math.sqrt(ACCx * ACCx + ACCy * ACCy + ACCz * ACCz)
-        accYnorm = ACCy / math.sqrt(ACCx * ACCx + ACCy * ACCy + ACCz * ACCz)
-
-        pitch = math.asin(accXnorm)
-        roll = -math.asin(accYnorm / math.cos(pitch))
-
-        if(IMU.BerryIMUversion == 1 or IMU.BerryIMUversion == 3):
-            magXcomp = MAGx * math.cos(pitch) + MAGz * math.sin(pitch)
-        else:
-            magXcomp = MAGx * math.cos(pitch) - MAGz * math.sin(pitch)
-
-        if(IMU.BerryIMUversion == 1 or IMU.BerryIMUversion == 3):
-            magYcomp = MAGx * math.sin(roll) * math.sin(pitch) + MAGy * math.cos(roll) - MAGz * math.sin(roll) * math.cos(pitch)
-        else:
-            magYcomp = MAGx * math.sin(roll) * math.sin(pitch) + MAGy * math.cos(roll) + MAGz * math.sin(roll) * math.cos(pitch)
-
-        tiltCompensatedHeading = 180 * math.atan2(magYcomp, magXcomp) / M_PI
-        if tiltCompensatedHeading < 0:
-            tiltCompensatedHeading += 360
-
-        outputString += "# kalmanX %5.2f   kalmanY %5.2f #" % (kalmanX, kalmanY)
+        outputString += "# kalmanX %5.2f   kalmanY %5.2f   kalmanZ %5.2f #" % (kalmanX, kalmanY, kalmanZ)
 
         #print(outputString)
         
@@ -361,6 +382,7 @@ def read_imu_data():
             
             global_kalman_x = kalmanX
             global_kalman_y = kalmanY
+            global_kalman_z = kalmanZ
         
         time.sleep(0.03)
 

@@ -22,7 +22,7 @@ def main():
     for _ in range(5):
 
         with berryIMU.berry_lock:
-            print(f"x: {berryIMU.global_kalman_x}, y: {berryIMU.global_kalman_y}")
+            print(f"x: {berryIMU.global_kalman_x}, y: {berryIMU.global_kalman_y}, z: {berryIMU.global_kalman_z}")
 
         time.sleep(3)
             
