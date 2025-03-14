@@ -5,7 +5,7 @@ import adafruit_bmp280
 # Create sensor object, communicating over the board's default I2C bus
 try:
     i2c = board.I2C()  # Initialize I2C communication using the board's default pins (SCL and SDA)
-    bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x77)  # Connect to the BMP280 sensor at address 0x77
+    bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x76)  # Connect to the BMP280 sensor at address 0x77
 except Exception as e:
     print("rip")
     print("Error: ", e)  # Handle initialization errors, e.g., if the sensor is not connected
