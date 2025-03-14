@@ -149,18 +149,22 @@ def record_data(n, begin_time, flag=""):
     except Exception as e:
         print("Error reading GPS data: ", e)
         latitude = longitude = None
+        
+    # Convert from m to ft and m/s to ft/s
+    altitude = altitude * 3.28084 if altitude is not None else None
+    velocity = velocity * 3.28084 if velocity is not None else None
     
     data = {
             "n": n,
             "datetime": time.strftime("%Y-%m-%d %H:%M:%S"),
             "timestamp": round(time.time() - begin_time,3),
             "altitude": altitude,
+            "velocity": velocity,
             "temperature": temperature,
             "longitude": longitude,
             "latitude": latitude,
-            "acc_x": -1,
-            "acc_y": -1,
-            "acc_z": -1,
+            "angle_x": -1,
+            "angle_y": -1,
             "flag": flag
             }
     
@@ -169,7 +173,7 @@ def record_data(n, begin_time, flag=""):
     
     # Debug
     print(dic_to_string(data))
-    print("Velocity: ", velocity)
+    
     
     return data
     
