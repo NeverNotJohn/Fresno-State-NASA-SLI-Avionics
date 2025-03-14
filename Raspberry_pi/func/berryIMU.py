@@ -95,6 +95,7 @@ ZP_10 = 0.0
 ZP_11 = 0.0
 KFangleX = 0.0
 KFangleY = 0.0
+KFangleZ = 0.0
 
 def kalmanFilterZ ( accAngle, gyroRate, DT):
     z=0.0
