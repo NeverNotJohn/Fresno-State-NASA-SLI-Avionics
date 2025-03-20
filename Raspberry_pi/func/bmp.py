@@ -87,6 +87,7 @@ def main():
     initial = time.time()  # Record the start time for relative timing
     while True:
         print(f"time: {time.time() - initial} alt: {read_altitude()}")
+        
 
 # Entry point for the script
 if __name__ == "__main__":

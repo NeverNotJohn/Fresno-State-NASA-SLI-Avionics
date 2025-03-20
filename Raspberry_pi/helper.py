@@ -200,7 +200,6 @@ def main():
     while True:
         print(dic_to_string(record_data(n, begin_time, None)))
         n+=1
-        time.sleep(1)
         
 if __name__ == "__main__":
     main()
