@@ -121,8 +121,9 @@ def record_data(n, begin_time, flag=""):
     curr_time = round(time.time() - begin_time, 3)
         
     # Get Previous Data
-    prev_altitude = DATA_ARRAY[-1]["altitude"] if DATA_ARRAY else None
-    prev_time = DATA_ARRAY[-1]["timestamp"] if DATA_ARRAY else None        
+    # Change every 1 second
+    prev_altitude = DATA_ARRAY[-50]["altitude"] if DATA_ARRAY else None
+    prev_time = DATA_ARRAY[-50]["timestamp"] if DATA_ARRAY else None        
 
     # Get Data
     # Get altitude/velocity
