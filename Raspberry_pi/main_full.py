@@ -43,7 +43,7 @@ PIN     | GPIO26
 # Constants that won't be touched
 
 
-FLIGHT_MIN = 1          # FEET
+FLIGHT_MIN = 5          # FEET
 SLEEP_TIME = 0.001
 
 def main():
