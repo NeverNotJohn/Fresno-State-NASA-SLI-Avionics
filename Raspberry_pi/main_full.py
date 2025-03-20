@@ -45,7 +45,7 @@ PIN     | GPIO26
 
 
 FLIGHT_MIN = 5          # FEET
-SLEEP_TIME = 0.001
+SLEEP_TIME = 0.020      # Seconds
 
 def main():
     
