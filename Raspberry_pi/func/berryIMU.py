@@ -370,7 +370,7 @@ def read_imu_data():
         kalmanX = kalmanFilterX(AccXangle, rate_gyr_x, LP)
         kalmanZ = kalmanFilterZ(AccZangle, rate_gyr_z, LP)
 
-        outputString += "# kalmanX %5.2f   kalmanY %5.2f   kalmanZ %5.2f #" % (kalmanX, kalmanY, gyroZangle)
+        outputString += "# kalmanX %5.2f   kalmanY %5.2f   kalmanZ %5.2f #" % (kalmanX, kalmanY, CFangleZ)
 
         print(outputString)
         
