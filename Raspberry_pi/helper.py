@@ -115,7 +115,8 @@ def record_data(n, begin_time, flag=""):
     
     
     # Beep if it works
-    if n % 250 == 0:
+    # Every 5 seconds
+    if n % 125 == 0:
         beep_thread = threading.Thread(target=beep, args=(BUZZER_PIN, 0.2, 1))
         beep_thread.start()
         
@@ -125,8 +126,8 @@ def record_data(n, begin_time, flag=""):
     # Get Previous Data
     # Change every 1 second
     try:
-        prev_altitude = DATA_ARRAY[-50]["altitude"] if DATA_ARRAY else None
-        prev_time = DATA_ARRAY[-50]["timestamp"] if DATA_ARRAY else None        
+        prev_altitude = DATA_ARRAY[-25]["altitude"] if DATA_ARRAY else None
+        prev_time = DATA_ARRAY[-25]["timestamp"] if DATA_ARRAY else None        
     except Exception as e:
         prev_altitude = None
         prev_time = None
@@ -170,7 +171,7 @@ def record_data(n, begin_time, flag=""):
             angle_x = berryIMU.global_kalman_x
             angle_y = berryIMU.global_kalman_y
     except Exception as e:
-        print("Error reading GPS data ", e)
+        print("Error reading Angle data ", e)
         angle_x = -1
         angle_y = -1
     
@@ -208,7 +209,7 @@ def main():
     begin_time = time.time()
     while True:
         print(dic_to_string(record_data(n, begin_time, None)))
-        time.sleep(0.02)
+        time.sleep(0.04)
         n+=1
         
 if __name__ == "__main__":
