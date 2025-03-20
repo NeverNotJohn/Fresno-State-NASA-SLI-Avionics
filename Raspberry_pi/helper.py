@@ -170,6 +170,7 @@ def record_data(n, begin_time, flag=""):
         with berryIMU.berry_lock:
             angle_x = berryIMU.global_kalman_x
             angle_y = berryIMU.global_kalman_y
+            angle_z = berryIMU.global_kalman_z
     except Exception as e:
         print("Error reading Angle data ", e)
         angle_x = -1
@@ -186,6 +187,7 @@ def record_data(n, begin_time, flag=""):
             "latitude": latitude,
             "angle_x": angle_x,
             "angle_y": angle_y,
+            "angle_z": angle_z,
             "flag": flag
             }
     

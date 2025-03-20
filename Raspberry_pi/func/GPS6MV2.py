@@ -44,11 +44,7 @@ def get_GPS():
 """ Main function for debugging """
 		
 def main():
-	while True:
-		gps_data = get_GPS()
-		gps = "Latitude=  " + str(gps_data[0])+ "  and Longitude=" + str(gps_data[1])
-		print(gps)
-		time.sleep(1)
+	get_GPS()
 		 
 if __name__ == "__main__":
     main()

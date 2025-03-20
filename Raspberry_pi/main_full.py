@@ -66,7 +66,7 @@ def main():
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     print("Writing to: ", filename)
     writer = csv.writer(open(filename, "w", newline=""))
-    writer.writerow(["n", "Datetime (UTC)", "Timestamp (s)", "Altitude (ft)", "Velocity (ft/s)", "Temperature (C)",  "Longitude", "Latitude", "Roll (°)", "Pitch (°)", "Flag"])
+    writer.writerow(["n", "Datetime (UTC)", "Timestamp (s)", "Altitude (ft)", "Velocity (ft/s)", "Temperature (C)",  "Longitude", "Latitude", "Roll (°)", "Pitch (°)", "Yaw (°)", "Flag"])
     
     """ Variables """
     LAUNCHED = False
@@ -90,7 +90,7 @@ def main():
         altitude = data["altitude"]
         
         # Write to CSV
-        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["flag"]])
+        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["angle_z"], data["flag"]])
         
         # Indexing stuff
         n = n + 1
@@ -115,7 +115,7 @@ def main():
             ground_counter += 1
             
         # Write to CSV
-        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["flag"]])
+        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["angle_z"], data["flag"]])
         
         # Indexing Stuff
         n = n + 1
@@ -137,7 +137,7 @@ def main():
         temperature = data["temperature"]
         
         # Write to CSV
-        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["flag"]])
+        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["angle_z"], data["flag"]])
         
         # Debug
         print(f"Max Velocity: {helper.MAX_VELOCITY}")
