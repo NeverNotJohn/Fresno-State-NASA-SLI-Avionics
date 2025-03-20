@@ -198,8 +198,11 @@ def main():
     n=0
     begin_time = time.time()
     while True:
-        print(dic_to_string(record_data(n, begin_time, None)))
-        n+=1
+        
+        print(f"Time: {time.time() - begin_time} Data: {bmp.read_altitude()}")
+        
+        #print(dic_to_string(record_data(n, begin_time, None)))
+        #n+=1
         
 if __name__ == "__main__":
     main()
