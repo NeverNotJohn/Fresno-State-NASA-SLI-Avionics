@@ -199,7 +199,7 @@ def main():
     begin_time = time.time()
     while True:
         
-        print(f"Time: {time.time() - begin_time} Data: {bmp.read_altitude()}")
+        print(f"Time: {time.time() - begin_time} Data: {bmp.read_temp()}")
         
         #print(dic_to_string(record_data(n, begin_time, None)))
         #n+=1
