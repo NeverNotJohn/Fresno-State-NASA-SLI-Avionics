@@ -155,30 +155,24 @@ def record_data(n, begin_time, flag=""):
         temperature = None
     
     # Get GPS Data
-    #try:
-    #    with GPS6MV2.GPS_lock:
-    #        longitude = GPS6MV2.global_lng
-    #        latitude = GPS6MV2.global_lat
-    #except Exception as e:
-    #    print("Error reading GPS data: ", e)
-    #    latitude = -1
-    #    longitude = -1
-    
-    latitude = -1
-    longitude = -1
+    try:
+        with GPS6MV2.GPS_lock:
+            longitude = GPS6MV2.global_lng
+            latitude = GPS6MV2.global_lat
+    except Exception as e:
+        print("Error reading GPS data: ", e)
+        latitude = -1
+        longitude = -1
     
     # Get Orientation
-    #try:
-    #    with berryIMU.berry_lock:
-    #        angle_x = berryIMU.global_kalman_x
-    #        angle_y = berryIMU.global_kalman_y
-    #except Exception as e:
-    #    print("Error reading GPS data ", e)
-    #    angle_x = -1
-    #    angle_y = -1
-    
-    angle_x = -1
-    angle_y = -1
+    try:
+        with berryIMU.berry_lock:
+            angle_x = berryIMU.global_kalman_x
+            angle_y = berryIMU.global_kalman_y
+    except Exception as e:
+        print("Error reading GPS data ", e)
+        angle_x = -1
+        angle_y = -1
     
     data = {
             "n": n,
