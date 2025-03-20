@@ -102,7 +102,7 @@ def main():
     ground_counter = 0
     lift_off_time = time.time()
     
-    while (ground_counter < 10) and (int(time.time()) < int(lift_off_time + 900)):      # bout 10 seconds of ground time
+    while (ground_counter < 50) and (int(time.time()) < int(lift_off_time + 900)):      # bout 2 seconds of ground time
         data = helper.record_data(n, begin_time, "During Launch")
         altitude = data["altitude"]
         
