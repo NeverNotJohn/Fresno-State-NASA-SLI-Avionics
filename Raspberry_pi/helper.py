@@ -153,14 +153,17 @@ def record_data(n, begin_time, flag=""):
         temperature = None
     
     # Get GPS Data
-    try:
-        with GPS6MV2.GPS_lock:
-            longitude = GPS6MV2.global_lng
-            latitude = GPS6MV2.global_lat
-    except Exception as e:
-        print("Error reading GPS data: ", e)
-        latitude = -1
-        longitude = -1
+    #try:
+    #    with GPS6MV2.GPS_lock:
+    #        longitude = GPS6MV2.global_lng
+    #        latitude = GPS6MV2.global_lat
+    #except Exception as e:
+    #    print("Error reading GPS data: ", e)
+    #    latitude = -1
+    #    longitude = -1
+    
+    latitude = -1
+    longitude = -1
     
     # Get Orientation
     try:
