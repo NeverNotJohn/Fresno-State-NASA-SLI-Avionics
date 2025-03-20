@@ -23,7 +23,7 @@ def get_GPS():
  
 		try:
 			port = "/dev/serial0"
-			ser = serial.Serial(port, baudrate=9600, timeout=0.01)
+			ser = serial.Serial(port, baudrate=9600, timeout=0.1)
 			newdata = ser.readline()
 			newmsg = pynmea2.parse(newdata.decode("utf-8"))
 			lat = newmsg.latitude
