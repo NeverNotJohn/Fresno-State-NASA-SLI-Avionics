@@ -385,7 +385,7 @@ def read_imu_data():
             global_kalman_y = kalmanY
             global_kalman_z = kalmanZ
         
-        time.sleep(0.03)
+        time.sleep(0.020)
 
 # Call the function to start reading IMU data
 
