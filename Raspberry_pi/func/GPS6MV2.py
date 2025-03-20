@@ -28,6 +28,10 @@ def get_GPS():
 			newmsg = pynmea2.parse(newdata.decode("utf-8"))
 			lat = newmsg.latitude
 			lng = newmsg.longitude
+   
+			# Debug
+			print("Latitude: ", lat)
+			print("Longitude: ", lng)
 	
 			# Update global variables
 			with GPS_lock:
@@ -45,6 +49,7 @@ def get_GPS():
 		
 def main():
 	get_GPS()
+ 
 		 
 if __name__ == "__main__":
     main()
