@@ -23,15 +23,15 @@ def get_GPS():
  
 		try:
 			port = "/dev/serial0"
-			ser = serial.Serial(port, baudrate=9600, timeout=0.1)
+			ser = serial.Serial(port, baudrate=9600, timeout=0.01)
 			newdata = ser.readline()
 			newmsg = pynmea2.parse(newdata.decode("utf-8"))
 			lat = newmsg.latitude
 			lng = newmsg.longitude
    
 			# Debug
-			print("Latitude: ", lat)
-			print("Longitude: ", lng)
+			#print("Latitude: ", lat)
+			#print("Longitude: ", lng)
 	
 			# Update global variables
 			with GPS_lock:
