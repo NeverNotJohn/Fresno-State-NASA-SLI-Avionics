@@ -30,8 +30,8 @@ def get_GPS():
 			lng = newmsg.longitude
    
 			# Debug
-			print("Latitude: ", lat)
-			print("Longitude: ", lng)
+			#print("Latitude: ", lat)
+			#print("Longitude: ", lng)
 	
 			# Update global variables
 			with GPS_lock:
