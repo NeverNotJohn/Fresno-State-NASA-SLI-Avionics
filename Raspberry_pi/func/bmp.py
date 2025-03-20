@@ -86,11 +86,7 @@ def main():
     
     initial = time.time()  # Record the start time for relative timing
     while True:
-        print("\nTime: %0.1f s" % (time.time() - initial))  # Print elapsed time
-        print("Temperature: %0.1f C" % read_temp())  # Print temperature
-        print("Pressure: %0.1f hPa" % read_pressure())  # Print pressure
-        print("Altitude = %0.2f meters" % read_altitude())  # Print altitude
-        time.sleep(3)  # Pause for 3 seconds between readings
+        print(f"time: {time.time() - initial} alt: {read_altitude()}")
 
 # Entry point for the script
 if __name__ == "__main__":
