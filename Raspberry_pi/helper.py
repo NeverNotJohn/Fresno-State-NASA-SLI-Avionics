@@ -3,6 +3,7 @@ from func import GPS6MV2
 from trash import MPU6050
 from func import kv4pt
 from func import berryIMU
+import threading
 
 import RPi.GPIO as GPIO
 import time
@@ -114,8 +115,9 @@ def record_data(n, begin_time, flag=""):
     
     
     # Beep if it works
-    if n % 5 == 0:
-        beep(BUZZER_PIN, 0.2, 1)
+    if n % 250 == 0:
+        beep_thread = threading.Thread(target=beep, args=(BUZZER_PIN, 0.2, 1))
+        beep_thread.start()
         
     # Get Current Time
     curr_time = round(time.time() - begin_time, 3)
