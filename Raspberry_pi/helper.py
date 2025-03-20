@@ -112,6 +112,7 @@ def record_data(n, begin_time, flag=""):
     global APOGEE
     global DATETIME, EXECUTION_TIME, ALTITUDE, TEMPERATURE, LONGITUDE, LATITUDE, ACC_X, ACC_Y, ACC_Z, MAX_VELOCITY
     
+    
     # Beep if it works
     if n % 5 == 0:
         beep(BUZZER_PIN, 0.2, 1)
@@ -148,12 +149,13 @@ def record_data(n, begin_time, flag=""):
     
     # Get GPS Data
     try:
-        temp = GPS6MV2.get_GPS()
-        latitude = temp[0]
-        longitude = temp[1]
+        with GPS6MV2.GPS_lock:
+            longitude = GPS6MV2.global_lng
+            latitude = GPS6MV2.global_lat
     except Exception as e:
         print("Error reading GPS data: ", e)
-        latitude = longitude = None
+        latitude = -1
+        longitude = -1
     
     # Get Orientation
     try:

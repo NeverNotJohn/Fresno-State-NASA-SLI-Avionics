@@ -1,5 +1,6 @@
 from func import bmp
 from trash import MPU6050
+from func import GPS6MV2
 from func import kv4pt
 from func import server
 from func import berryIMU
@@ -78,9 +79,11 @@ def main():
     altitude = 0
     n = 0
     
-    # Start Orientation Thread
+    # Start Threads
     berry_thread = threading.Thread(target=berryIMU.read_imu_data)
+    GPS_thread = threading.Thread(target=GPS6MV2.get_GPS)
     berry_thread.start()
+    GPS_thread.start()
     
     while altitude < FLIGHT_MIN:
         data = helper.record_data(n, begin_time, "Before Launch")
