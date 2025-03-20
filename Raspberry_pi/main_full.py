@@ -2,6 +2,7 @@ from func import bmp
 from trash import MPU6050
 from func import kv4pt
 from func import server
+from func import berryIMU
 import helper
 
 import time
@@ -9,6 +10,7 @@ import csv
 import datetime
 import os
 import RPi.GPIO as GPIO
+import threading
 
 """
 --------------------PIN LAYOUT--------------------
@@ -42,7 +44,7 @@ PIN     | GPIO26
 
 
 FLIGHT_MIN = 1          # FEET
-SLEEP_TIME = 0.5
+SLEEP_TIME = 0.001
 
 def main():
     
@@ -75,6 +77,11 @@ def main():
     begin_time = time.time()
     altitude = 0
     n = 0
+    
+    # Start Orientation Thread
+    berry_thread = threading.Thread(target=berryIMU.read_imu_data)
+    berry_thread.start()
+    
     while altitude < FLIGHT_MIN:
         data = helper.record_data(n, begin_time, "Before Launch")
         altitude = data["altitude"]

@@ -2,6 +2,7 @@ from func import bmp
 from func import GPS6MV2
 from trash import MPU6050
 from func import kv4pt
+from func import berryIMU
 
 import RPi.GPIO as GPIO
 import time
@@ -153,7 +154,16 @@ def record_data(n, begin_time, flag=""):
     except Exception as e:
         print("Error reading GPS data: ", e)
         latitude = longitude = None
-        
+    
+    # Get Orientation
+    try:
+        with berryIMU.berry_lock:
+            angle_x = berryIMU.global_kalman_x
+            angle_y = berryIMU.global_kalman_y
+    except Exception as e:
+        print("Error reading GPS data ", e)
+        angle_x = -1
+        angle_y = -1
     
     data = {
             "n": n,
@@ -164,8 +174,8 @@ def record_data(n, begin_time, flag=""):
             "temperature": temperature,
             "longitude": longitude,
             "latitude": latitude,
-            "angle_x": -1,
-            "angle_y": -1,
+            "angle_x": angle_x,
+            "angle_y": angle_y,
             "flag": flag
             }
     
