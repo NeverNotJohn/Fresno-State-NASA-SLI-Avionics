@@ -208,6 +208,7 @@ def main():
     begin_time = time.time()
     while True:
         print(dic_to_string(record_data(n, begin_time, None)))
+        time.sleep(0.02)
         n+=1
         
 if __name__ == "__main__":
