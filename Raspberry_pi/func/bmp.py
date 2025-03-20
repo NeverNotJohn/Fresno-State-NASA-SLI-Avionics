@@ -8,9 +8,9 @@ try:
     i2c = board.I2C()  # Initialize I2C communication using the board's default pins (SCL and SDA)
     bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x76)  # Connect to the BMP280 sensor at address 0x77
     bmp280.mode = adafruit_bmp280.MODE_NORMAL
-    bmp280.overscan_temperature = adafruit_bmp280.OVERSCAN_X2
-    bmp280.overscan_pressure = adafruit_bmp280.OVERSCAN_X2
-    bmp280.standby_period = adafruit_bmp280.STANDBY_TC_0_5
+    bmp280.overscan_temperature = adafruit_bmp280.OVERSCAN_X4
+    bmp280.overscan_pressure = adafruit_bmp280.OVERSCAN_X4
+    bmp280.standby_period = adafruit_bmp280.STANDBY_TC_62_5
 except Exception as e:
     print("rip")
     print("Error: ", e)  # Handle initialization errors, e.g., if the sensor is not connected
