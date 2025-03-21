@@ -257,135 +257,131 @@ def read_imu_data():
     IMU.initIMU()       # Initialise the accelerometer, gyroscope and compass
 
     while True:
-        # Read the accelerometer, gyroscope and magnetometer values
-        ACCx = IMU.readACCx()
-        ACCy = IMU.readACCy()
-        ACCz = IMU.readACCz()
-        GYRx = IMU.readGYRx()
-        GYRy = IMU.readGYRy()
-        GYRz = IMU.readGYRz()
-        MAGx = IMU.readMAGx()
-        MAGy = IMU.readMAGy()
-        MAGz = IMU.readMAGz()
+        try:
+            # Read the accelerometer, gyroscope and magnetometer values
+            ACCx = IMU.readACCx()
+            ACCy = IMU.readACCy()
+            ACCz = IMU.readACCz()
+            GYRx = IMU.readGYRx()
+            GYRy = IMU.readGYRy()
+            GYRz = IMU.readGYRz()
+            MAGx = IMU.readMAGx()
+            MAGy = IMU.readMAGy()
+            MAGz = IMU.readMAGz()
 
-        # Apply compass calibration
-        MAGx -= (magXmin + magXmax) / 2
-        MAGy -= (magYmin + magYmax) / 2
-        MAGz -= (magZmin + magZmax) / 2
+            # Apply compass calibration
+            MAGx -= (magXmin + magXmax) / 2
+            MAGy -= (magYmin + magYmax) / 2
+            MAGz -= (magZmin + magZmax) / 2
 
-        # Calculate loop Period(LP). How long between Gyro Reads
-        b = datetime.datetime.now() - a
-        a = datetime.datetime.now()
-        LP = b.microseconds / (1000000 * 1.0)
-        outputString = "Loop Time %5.2f " % (LP)
+            # Calculate loop Period(LP). How long between Gyro Reads
+            b = datetime.datetime.now() - a
+            a = datetime.datetime.now()
+            LP = b.microseconds / (1000000 * 1.0)
+            outputString = "Loop Time %5.2f " % (LP)
 
-        # Apply low pass filter
-        MAGx = MAGx * MAG_LPF_FACTOR + oldXMagRawValue * (1 - MAG_LPF_FACTOR)
-        MAGy = MAGy * MAG_LPF_FACTOR + oldYMagRawValue * (1 - MAG_LPF_FACTOR)
-        MAGz = MAGz * MAG_LPF_FACTOR + oldZMagRawValue * (1 - MAG_LPF_FACTOR)
-        ACCx = ACCx * ACC_LPF_FACTOR + oldXAccRawValue * (1 - ACC_LPF_FACTOR)
-        ACCy = ACCy * ACC_LPF_FACTOR + oldYAccRawValue * (1 - ACC_LPF_FACTOR)
-        ACCz = ACCz * ACC_LPF_FACTOR + oldZAccRawValue * (1 - ACC_LPF_FACTOR)
+            # Apply low pass filter
+            MAGx = MAGx * MAG_LPF_FACTOR + oldXMagRawValue * (1 - MAG_LPF_FACTOR)
+            MAGy = MAGy * MAG_LPF_FACTOR + oldYMagRawValue * (1 - MAG_LPF_FACTOR)
+            MAGz = MAGz * MAG_LPF_FACTOR + oldZMagRawValue * (1 - MAG_LPF_FACTOR)
+            ACCx = ACCx * ACC_LPF_FACTOR + oldXAccRawValue * (1 - ACC_LPF_FACTOR)
+            ACCy = ACCy * ACC_LPF_FACTOR + oldYAccRawValue * (1 - ACC_LPF_FACTOR)
+            ACCz = ACCz * ACC_LPF_FACTOR + oldZAccRawValue * (1 - ACC_LPF_FACTOR)
 
-        oldXMagRawValue = MAGx
-        oldYMagRawValue = MAGy
-        oldZMagRawValue = MAGz
-        oldXAccRawValue = ACCx
-        oldYAccRawValue = ACCy
-        oldZAccRawValue = ACCz
+            oldXMagRawValue = MAGx
+            oldYMagRawValue = MAGy
+            oldZMagRawValue = MAGz
+            oldXAccRawValue = ACCx
+            oldYAccRawValue = ACCy
+            oldZAccRawValue = ACCz
 
-        # Median filter for accelerometer
-        for x in range(ACC_MEDIANTABLESIZE - 1, 0, -1):
-            acc_medianTable1X[x] = acc_medianTable1X[x - 1]
-            acc_medianTable1Y[x] = acc_medianTable1Y[x - 1]
-            acc_medianTable1Z[x] = acc_medianTable1Z[x - 1]
+            # Median filter for accelerometer
+            for x in range(ACC_MEDIANTABLESIZE - 1, 0, -1):
+                acc_medianTable1X[x] = acc_medianTable1X[x - 1]
+                acc_medianTable1Y[x] = acc_medianTable1Y[x - 1]
+                acc_medianTable1Z[x] = acc_medianTable1Z[x - 1]
 
-        acc_medianTable1X[0] = ACCx
-        acc_medianTable1Y[0] = ACCy
-        acc_medianTable1Z[0] = ACCz
+            acc_medianTable1X[0] = ACCx
+            acc_medianTable1Y[0] = ACCy
+            acc_medianTable1Z[0] = ACCz
 
-        acc_medianTable2X = acc_medianTable1X[:]
-        acc_medianTable2Y = acc_medianTable1Y[:]
-        acc_medianTable2Z = acc_medianTable1Z[:]
+            acc_medianTable2X = acc_medianTable1X[:]
+            acc_medianTable2Y = acc_medianTable1Y[:]
+            acc_medianTable2Z = acc_medianTable1Z[:]
 
-        acc_medianTable2X.sort()
-        acc_medianTable2Y.sort()
-        acc_medianTable2Z.sort()
+            acc_medianTable2X.sort()
+            acc_medianTable2Y.sort()
+            acc_medianTable2Z.sort()
 
-        ACCx = acc_medianTable2X[int(ACC_MEDIANTABLESIZE / 2)]
-        ACCy = acc_medianTable2Y[int(ACC_MEDIANTABLESIZE / 2)]
-        ACCz = acc_medianTable2Z[int(ACC_MEDIANTABLESIZE / 2)]
+            ACCx = acc_medianTable2X[int(ACC_MEDIANTABLESIZE / 2)]
+            ACCy = acc_medianTable2Y[int(ACC_MEDIANTABLESIZE / 2)]
+            ACCz = acc_medianTable2Z[int(ACC_MEDIANTABLESIZE / 2)]
 
-        # Median filter for magnetometer
-        for x in range(MAG_MEDIANTABLESIZE - 1, 0, -1):
-            mag_medianTable1X[x] = mag_medianTable1X[x - 1]
-            mag_medianTable1Y[x] = mag_medianTable1Y[x - 1]
-            mag_medianTable1Z[x] = mag_medianTable1Z[x - 1]
+            # Median filter for magnetometer
+            for x in range(MAG_MEDIANTABLESIZE - 1, 0, -1):
+                mag_medianTable1X[x] = mag_medianTable1X[x - 1]
+                mag_medianTable1Y[x] = mag_medianTable1Y[x - 1]
+                mag_medianTable1Z[x] = mag_medianTable1Z[x - 1]
 
-        mag_medianTable1X[0] = MAGx
-        mag_medianTable1Y[0] = MAGy
-        mag_medianTable1Z[0] = MAGz
+            mag_medianTable1X[0] = MAGx
+            mag_medianTable1Y[0] = MAGy
+            mag_medianTable1Z[0] = MAGz
 
-        mag_medianTable2X = mag_medianTable1X[:]
-        mag_medianTable2Y = mag_medianTable1Y[:]
-        mag_medianTable2Z = mag_medianTable1Z[:]
+            mag_medianTable2X = mag_medianTable1X[:]
+            mag_medianTable2Y = mag_medianTable1Y[:]
+            mag_medianTable2Z = mag_medianTable1Z[:]
 
-        mag_medianTable2X.sort()
-        mag_medianTable2Y.sort()
-        mag_medianTable2Z.sort()
+            mag_medianTable2X.sort()
+            mag_medianTable2Y.sort()
+            mag_medianTable2Z.sort()
 
-        MAGx = mag_medianTable2X[int(MAG_MEDIANTABLESIZE / 2)]
-        MAGy = mag_medianTable2Y[int(MAG_MEDIANTABLESIZE / 2)]
-        MAGz = mag_medianTable2Z[int(MAG_MEDIANTABLESIZE / 2)]
+            MAGx = mag_medianTable2X[int(MAG_MEDIANTABLESIZE / 2)]
+            MAGy = mag_medianTable2Y[int(MAG_MEDIANTABLESIZE / 2)]
+            MAGz = mag_medianTable2Z[int(MAG_MEDIANTABLESIZE / 2)]
 
-        # Convert Gyro raw to degrees per second
-        rate_gyr_x = GYRx * G_GAIN
-        rate_gyr_y = GYRy * G_GAIN
-        rate_gyr_z = GYRz * G_GAIN
+            # Convert Gyro raw to degrees per second
+            rate_gyr_x = GYRx * G_GAIN
+            rate_gyr_y = GYRy * G_GAIN
+            rate_gyr_z = GYRz * G_GAIN
 
-        # Calculate the angles from the gyro.
-        gyroXangle += rate_gyr_x * LP
-        gyroYangle += rate_gyr_y * LP
-        gyroZangle += rate_gyr_z * LP
+            # Calculate the angles from the gyro.
+            gyroXangle += rate_gyr_x * LP
+            gyroYangle += rate_gyr_y * LP
+            gyroZangle += rate_gyr_z * LP
 
-        # Convert Accelerometer values to degrees
-        AccXangle = (math.atan2(ACCy, ACCz) * RAD_TO_DEG)
-        AccYangle = (math.atan2(ACCz, ACCx) + M_PI) * RAD_TO_DEG
-        AccZangle = (math.atan2(ACCx, ACCy) * RAD_TO_DEG)       # FIXME
+            # Convert Accelerometer values to degrees
+            AccXangle = (math.atan2(ACCy, ACCz) * RAD_TO_DEG)
+            AccYangle = (math.atan2(ACCz, ACCx) + M_PI) * RAD_TO_DEG
+            AccZangle = (math.atan2(ACCx, ACCy) * RAD_TO_DEG)       # FIXME
 
-        if AccYangle > 90:
-            AccYangle -= 270.0
-        else:
-            AccYangle += 90.0
+            if AccYangle > 90:
+                AccYangle -= 270.0
+            else:
+                AccYangle += 90.0
 
-        
+            # Complementary filter used to combine the accelerometer and gyro values.
+            CFangleX = AA * (CFangleX + rate_gyr_x * LP) + (1 - AA) * AccXangle
+            CFangleY = AA * (CFangleY + rate_gyr_y * LP) + (1 - AA) * AccYangle
+            CFangleZ = AA * (CFangleZ + rate_gyr_z * LP) + (1 - AA) * AccZangle
 
-        # Complementary filter used to combine the accelerometer and gyro values.
-        CFangleX = AA * (CFangleX + rate_gyr_x * LP) + (1 - AA) * AccXangle
-        CFangleY = AA * (CFangleY + rate_gyr_y * LP) + (1 - AA) * AccYangle
-        CFangleZ = AA * (CFangleZ + rate_gyr_z * LP) + (1 - AA) * AccZangle
+            # Kalman filter used to combine the accelerometer and gyro values.
+            kalmanY = kalmanFilterY(AccYangle, rate_gyr_y, LP)
+            kalmanX = kalmanFilterX(AccXangle, rate_gyr_x, LP)
+            kalmanZ = kalmanFilterZ(AccZangle, rate_gyr_z, LP)
 
-        # Kalman filter used to combine the accelerometer and gyro values.
-        kalmanY = kalmanFilterY(AccYangle, rate_gyr_y, LP)
-        kalmanX = kalmanFilterX(AccXangle, rate_gyr_x, LP)
-        kalmanZ = kalmanFilterZ(AccZangle, rate_gyr_z, LP)
+            # Set global var to this
+            with berry_lock:  # Ensures exclusive access
+                if berry_stop:
+                    break
 
-        #outputString += "# kalmanX %5.2f   kalmanY %5.2f   kalmanZ %5.2f #" % (kalmanX, kalmanY, kalmanZ)
-
-        #print(outputString)
-        
-        # Set global var to this
-
-        with berry_lock:  # Ensures exclusive access
-            
-            if berry_stop:
-                break
-            
             global_kalman_x = kalmanX
             global_kalman_y = kalmanY
             global_kalman_z = kalmanZ
-        
-        time.sleep(0.020)
+
+            time.sleep(0.020)
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            time.sleep(0.1)
 
 # Call the function to start reading IMU data
 
