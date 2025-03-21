@@ -49,9 +49,6 @@ SLEEP_TIME = 0.04      # Seconds... 25 Hz
 
 def main():
     
-    global MAX_VELOCITY
-    
-    
     print("Execution Start!")
     server.start_website("Awaiting Command")
     # Will only continue after stuff
