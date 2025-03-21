@@ -59,6 +59,6 @@ def main():
     landing_time = time.strftime("%H:%M:%S")
     kv4pt.transmit_data(BMP_APOGEE, temperature, landing_time, MAX_VELOCITY, roll, pitch, yaw)
 
-    if __name__ == "__main__":
-        main()
-        
+if __name__ == "__main__":
+    main()
+    
