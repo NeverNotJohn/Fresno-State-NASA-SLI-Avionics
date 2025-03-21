@@ -68,6 +68,14 @@ def main():
     
     
     kv4pt.transmit_data(BMP_APOGEE, temperature, landing_time, helper.MAX_VELOCITY, roll, pitch, yaw)
+    
+    with berryIMU.berry_lock:
+        berryIMU.berry_stop = True
+        print("Stopping BerryIMU thread")
+    
+    with GPS6MV2.GPS_lock:
+        GPS6MV2.GPS_stop = True
+        print("Stopping GPS thread")
 
 if __name__ == "__main__":
     main()
