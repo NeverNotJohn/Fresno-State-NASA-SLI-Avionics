@@ -88,6 +88,7 @@ def data_to_audio(data, audio_array):
     data = str(data)
     
     char_hash = {
+        '-': 'audio/negative.wav',
         '0': 'audio/0.wav',
         '1': 'audio/1.wav',
         '2': 'audio/2.wav',
@@ -105,7 +106,7 @@ def data_to_audio(data, audio_array):
         audio_array.append(char_hash[i])
         
         
-def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
+def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity, roll, pitch, yaw):
     """
     Final Transmission of NASA Hit point
     
@@ -140,7 +141,7 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
         audio_array.append("audio/apogee.wav")
         data_to_audio(apogee, audio_array)
         # FIXME: record feet
-        audio_array.append("audio/meters.wav")
+        audio_array.append("audio/ft.wav")
     except Exception as e:
         print(f"Error processing apogee data: {e}")
     
@@ -171,9 +172,29 @@ def transmit_data(apogee, temp_of_site, time_of_landing, max_velocity):
         audio_array.append("audio/max_velocity.wav")
         data_to_audio(max_velocity, audio_array)
         # FIXME: record feet per second
-        audio_array.append("audio/meters_per_second.wav")
+        audio_array.append("audio/ft_per_second.wav")
     except Exception as e:
         print(f"Error processing max velocity data: {e}")
+        
+    # Orientation
+    
+    try:
+        audio_array.append("audio/orientation.wav")
+        
+        audio_array.append("audio/roll.wav")
+        data_to_audio(roll, audio_array)
+        audio_array.append("audio/degrees.wav")
+        
+        audio_array.append("audio/pitch.wav")
+        data_to_audio(pitch, audio_array)
+        audio_array.append("audio/degrees.wav")
+        
+        audio_array.append("audio/yaw.wav")
+        data_to_audio(yaw, audio_array)
+        audio_array.append("audio/degrees.wav")
+    except Exception as e:
+        print(f"Error processing orientation data: {e}")
+    
     
     # Add Final Call Sign
     audio_array.append("audio/call_sign.wav")

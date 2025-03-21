@@ -132,9 +132,12 @@ def main():
         
         # FIXME: Get Firefly Data
         
-        # Record Temp
+        # Record
         data = helper.record_data(n, begin_time, "After Launch")
         temperature = data["temperature"]
+        roll = data["angle_x"]
+        pitch = data["angle_y"]
+        yaw = data["angle_z"]
         
         # Write to CSV
         writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["angle_z"], data["flag"]])
@@ -142,8 +145,8 @@ def main():
         # Debug
         print(f"Max Velocity: {helper.MAX_VELOCITY}")
         
-        # FIXME: Transmit Data
-        kv4pt.transmit_data(BMP_APOGEE, temperature, landing_time, 1)
+        # Transmit Data
+        kv4pt.transmit_data(BMP_APOGEE, temperature, landing_time, helper.MAX_VELOCITY, roll, pitch, yaw)
         
         # Indexing Stuff
         n = n + 1
