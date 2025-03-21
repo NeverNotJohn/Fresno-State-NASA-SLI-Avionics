@@ -57,6 +57,16 @@ def main():
     pitch = data["angle_y"]
     yaw = data["angle_z"]
     landing_time = time.strftime("%H:%M:%S")
+    
+    print("Landing Time: ", landing_time)
+    print("BMP_APOGEE: ", BMP_APOGEE)
+    print("Temperature: ", temperature)
+    print("max velocity: ", MAX_VELOCITY)
+    print("Roll: ", roll)
+    print("Pitch: ", pitch)
+    print("Yaw: ", yaw)
+    
+    
     kv4pt.transmit_data(BMP_APOGEE, temperature, landing_time, MAX_VELOCITY, roll, pitch, yaw)
 
 if __name__ == "__main__":
