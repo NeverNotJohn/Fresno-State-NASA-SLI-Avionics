@@ -9,6 +9,7 @@ import threading
 global_lat = -1
 global_lng = -1
 GPS_lock = threading.Lock()
+GPS_stop = False
 
 
 """-----FUNCTIONS-----"""
@@ -37,12 +38,20 @@ def get_GPS():
 			with GPS_lock:
 				global_lat = lat
 				global_lng = lng
+				if (GPS_stop):
+					ser.close()
+					break
+
 	
 			ser.close
 		except Exception as e:
 			#print("GPS ERROR")
 			lat = -1
 			lng = -1
+			with GPS_lock:
+				if (GPS_stop):
+					break
+   			
 
 
 """ Main function for debugging """
