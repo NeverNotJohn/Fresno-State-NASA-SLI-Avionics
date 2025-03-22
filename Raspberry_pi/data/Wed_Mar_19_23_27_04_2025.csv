@@ -1,0 +1,2 @@
+n,Datetime (UTC),Timestamp (s),Altitude (ft),Velocity (ft/s),Temperature (C),Longitude,Latitude,Roll (°),Pitch (°),Flag
+0,2025-03-19 23:27:05,0.403,0.29527559999999997,,22.162,-1,-1,0.0,0.0,Before Launch

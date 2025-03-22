@@ -44,7 +44,7 @@ PIN     | GPIO26
 # Constants that won't be touched
 
 
-FLIGHT_MIN = 5          # FEET
+FLIGHT_MIN = 30          # FEET
 SLEEP_TIME = 0.04      # Seconds... 25 Hz
 
 def main():
@@ -64,6 +64,7 @@ def main():
     # Ensure the directory exists
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     print("Writing to: ", filename)
+    time.sleep(5)
     writer = csv.writer(open(filename, "w", newline=""))
     writer.writerow(["n", "Datetime (UTC)", "Timestamp (s)", "Altitude (ft)", "Velocity (ft/s)", "Temperature (C)",  "Longitude", "Latitude", "Roll (°)", "Pitch (°)", "Yaw (°)", "Flag"])
     
@@ -126,8 +127,9 @@ def main():
     landing_time = time.strftime("%H:%M:%S")
     touch_down_time = time.time()
     print("Landing Time: ", landing_time)
+    writer.writerow(["Apogee", "Temp of Landing Site", "Landing Time", "Max velocity", "Roll", "Pitch", "Yaw"])
     
-    while int(time.time()) < int(touch_down_time + 300): # Execute for 300 seconds 
+    while int(time.time()) < int(touch_down_time + 240): # Execute for 240 seconds 
         
         # FIXME: Get Firefly Data
         
@@ -139,12 +141,21 @@ def main():
         yaw = data["angle_z"]
         
         # Write to CSV
-        writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["angle_z"], data["flag"]])
-        
+        # writer.writerow([data["n"], data["datetime"], data["timestamp"], data["altitude"], data["velocity"], data["temperature"], data["longitude"], data["latitude"], data["angle_x"], data["angle_y"], data["angle_z"], data["flag"]])
+        writer.writerow([BMP_APOGEE, temperature, landing_time, helper.MAX_VELOCITY, roll, pitch, yaw])
         # Debug
         print(f"Max Velocity: {helper.MAX_VELOCITY}")
         
         # Transmit Data
+        
+        print(f"Apogee: {BMP_APOGEE}")
+        print(f"Temperature: {temperature}")
+        print(f"Landing Time: {landing_time}")
+        print(f"Max Velocity: {helper.MAX_VELOCITY}")
+        print(f"Roll: {roll}")
+        print(f"Pitch: {pitch}")
+        print(f"Yaw: {yaw}")
+        
         kv4pt.transmit_data(BMP_APOGEE, temperature, landing_time, helper.MAX_VELOCITY, roll, pitch, yaw)
         
         # Indexing Stuff
@@ -152,7 +163,14 @@ def main():
         ground_counter += 1
         time.sleep(SLEEP_TIME)
         
-        
+    # Stop Threads
+    with berryIMU.berry_lock:
+        berryIMU.berry_stop = True
+        print("Stopping BerryIMU thread")
+    
+    with GPS6MV2.GPS_lock:
+        GPS6MV2.GPS_stop = True
+        print("Stopping GPS thread")
     
     
     
