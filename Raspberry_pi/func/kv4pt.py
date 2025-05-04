@@ -23,12 +23,12 @@ FLOW_CONTROL = None
 DELIMITER = b'\xFF\x00\xFF\x00\xFF\x00\xFF\x00'
 COMMAND_PTT_DOWN = b'\xFF\x00\xFF\x00\xFF\x00\xFF\x00\x01'
 COMMAND_PTT_UP = b'\xFF\x00\xFF\x00\xFF\x00\xFF\x00\x02'
-COMMAND_TUNE_TO = b'\xFF\x00\xFF\x00\xFF\x00\xFF\x00\x03\x31\x34\x37\x2E\x34\x32\x30\x30\x31\x34\x37\x2E\x34\x32\x30\x30\x00\x00\x06\x57'
+COMMAND_TUNE_TO = b'\xFF\x00\xFF\x00\xFF\x00\xFF\x00\x03\x31\x34\x36\x2E\x35\x32\x30\x30\x31\x34\x36\x2E\x35\x32\x30\x30\x00\x00\x06\x57'
 """
 // Delimiter               C  Parameters
-FF 00 FF 00 FF 00 FF 00 03 31 34 37 2E 34 32 30 30 31 34 37 2E 34 32 30 30 00 00 06 57
+FF 00 FF 00 FF 00 FF 00 03 31 34 36 2E 35 32 30 30 31 34 36 2E 35 32 30 30 00 00 06 57
                            Transmit freq           Receive freq            Tone  Sq Bandwidth
-                           147.4200                147.4200                0     6  W
+                           146.5200                146.5200                0     6  W
 """
 
 """-------------------------FUNCTIONS-------------------------"""
