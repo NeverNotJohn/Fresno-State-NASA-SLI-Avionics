@@ -4,9 +4,10 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import pygame
 from pygame.locals import *
-import serial
-#ser = serial.Serial('/dev/tty.usbserial', 38400, timeout=1)
-#ser = serial.Serial('COM3', 38400, timeout=1)
+
+# Import global vars
+from func import berryIMU
+        
 
 ax = ay = az = 0.0
 yaw_mode = True
@@ -55,11 +56,11 @@ def draw():
     # the way I'm holding the IMU board, X and Y axis are switched 
     # with respect to the OpenGL coordinate system
     if yaw_mode:                             # experimental
-        glRotatef(az, 0.0, 1.0, 0.0)  # Yaw,   rotate around y-axis
+        glRotatef(ay, 0.0, 1.0, 0.0)  # Yaw,   rotate around y-axis
     else:
         glRotatef(0.0, 0.0, 1.0, 0.0)
-    glRotatef(ay ,1.0,0.0,0.0)        # Pitch, rotate around x-axis
-    glRotatef(-1*ax ,0.0,0.0,1.0)     # Roll,  rotate around z-axis
+    glRotatef(ax ,1.0,0.0,0.0)        # Pitch, rotate around x-axis
+    glRotatef(az ,0.0,0.0,1.0)     # Roll,  rotate around z-axis
 
     glBegin(GL_QUADS)	
     glColor3f(0.0,1.0,0.0)
@@ -101,18 +102,18 @@ def draw():
          
 def read_data():
     global ax, ay, az
-    ax = ay = az = 0.0
-    line_done = 0
+    try:
+        with berryIMU.berry_lock:
+            ax = berryIMU.global_kalman_x
+            ay = berryIMU.global_kalman_y
+            az = berryIMU.global_kalman_z
+    except Exception as e:
+        print(f"{e}")
+        ax = 0
+        ay = 0
+        az = 0
 
-    # request data by sending a dot
-    #while not line_done:
-    if True:    
-        ax = 30
-        ay = 30
-        az = 30
-        line_done = 1 
-
-def main():
+def box_thread():
     global yaw_mode
 
     video_flags = OPENGL|DOUBLEBUF
@@ -139,5 +140,4 @@ def main():
 
     print ("fps:  %d" % ((frames*1000)/(pygame.time.get_ticks()-ticks)))
 
-if __name__ == '__main__': main()
 

@@ -6,6 +6,9 @@ from func import server
 from func import berryIMU
 import helper
 
+# Projects day
+import box
+
 import time
 import csv
 import datetime
@@ -44,7 +47,7 @@ PIN     | GPIO26
 # Constants that won't be touched
 
 
-FLIGHT_MIN = 5          # FEET
+FLIGHT_MIN = 30          # FEET
 SLEEP_TIME = 0.04      # Seconds... 25 Hz
 
 def main():
@@ -82,8 +85,10 @@ def main():
     # Start Threads
     berry_thread = threading.Thread(target=berryIMU.read_imu_data)
     GPS_thread = threading.Thread(target=GPS6MV2.get_GPS)
+    #box_threadd = threading.Thread(target=box.box_thread)
     berry_thread.start()
     GPS_thread.start()
+    #box_threadd.start()
     
     while altitude < FLIGHT_MIN:
         data = helper.record_data(n, begin_time, "Before Launch")
